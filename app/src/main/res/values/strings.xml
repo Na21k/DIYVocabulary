@@ -1,5 +1,16 @@
 <resources>
     <string name="app_name">DIY Vocabulary</string>
+
+    <!--Activity titles-->
     <string name="title_home">Home</string>
     <string name="title_tags">Tags</string>
+    <string name="title_authentication">Log in or sign up</string>
+
+    <!--Hints-->
+    <string name="login_hint">Login</string>
+    <string name="password_hint">Password</string>
+
+    <!--Buttons-->
+    <string name="log_in">Log in</string>
+    <string name="sign_up">Sign up</string>
 </resources>
