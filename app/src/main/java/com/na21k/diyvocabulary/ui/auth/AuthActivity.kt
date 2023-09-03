@@ -1,4 +1,4 @@
-package com.example.diyvocabulary.ui.auth
+package com.na21k.diyvocabulary.ui.auth
 
 import android.graphics.Color
 import android.os.Bundle
@@ -9,8 +9,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsAnimationCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.diyvocabulary.databinding.ActivityAuthBinding
 import com.google.android.material.math.MathUtils
+import com.na21k.diyvocabulary.databinding.ActivityAuthBinding
 
 class AuthActivity : AppCompatActivity() {
     private lateinit var mBinding: ActivityAuthBinding

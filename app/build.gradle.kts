@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.diyvocabulary"
+    namespace = "com.na21k.diyvocabulary"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.diyvocabulary"
+        applicationId = "com.na21k.diyvocabulary"
         minSdk = 30
         targetSdk = 33
         versionCode = 1

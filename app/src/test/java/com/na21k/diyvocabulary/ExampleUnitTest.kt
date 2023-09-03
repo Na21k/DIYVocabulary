@@ -1,4 +1,4 @@
-package com.example.diyvocabulary
+package com.na21k.diyvocabulary
 
 import org.junit.Test
 

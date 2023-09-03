@@ -1,4 +1,4 @@
-package com.example.diyvocabulary
+package com.na21k.diyvocabulary
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,9 +7,9 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.diyvocabulary.databinding.ActivityMainBinding
-import com.example.diyvocabulary.ui.auth.AuthActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.na21k.diyvocabulary.databinding.ActivityMainBinding
+import com.na21k.diyvocabulary.ui.auth.AuthActivity
 
 class MainActivity : AppCompatActivity() {
 

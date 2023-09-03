@@ -1,4 +1,4 @@
-package com.example.diyvocabulary.ui.home
+package com.na21k.diyvocabulary.ui.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

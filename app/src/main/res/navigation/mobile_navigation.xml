@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.example.diyvocabulary.ui.home.HomeFragment"
+        android:name="com.na21k.diyvocabulary.ui.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_tags"
-        android:name="com.example.diyvocabulary.ui.tags.TagsFragment"
+        android:name="com.na21k.diyvocabulary.ui.tags.TagsFragment"
         android:label="@string/title_tags"
         tools:layout="@layout/fragment_tags" />
 </navigation>

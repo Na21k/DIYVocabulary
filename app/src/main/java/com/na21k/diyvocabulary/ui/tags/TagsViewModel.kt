@@ -1,4 +1,4 @@
-package com.example.diyvocabulary.ui.tags
+package com.na21k.diyvocabulary.ui.tags
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
