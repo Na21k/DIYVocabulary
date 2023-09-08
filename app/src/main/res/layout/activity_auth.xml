@@ -47,8 +47,9 @@
         android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:hint="@string/password_hint"
-        app:layout_constraintBottom_toTopOf="@id/log_in_button"
+        app:layout_constraintBottom_toTopOf="@id/unexpected_error_text"
         app:layout_constraintTop_toBottomOf="@id/login_layout"
+        app:passwordToggleEnabled="true"
         app:startIconDrawable="@drawable/ic_key_24">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -63,6 +64,37 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!--TODO: use color from resources
+    (move respective colors to a separate night file)-->
+    <TextView
+        android:id="@+id/unexpected_error_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:textAlignment="center"
+        android:textColor="#FF9800"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/progress_bar"
+        app:layout_constraintTop_toBottomOf="@id/password_layout"
+        tools:text="Unexpected error"
+        tools:visibility="visible" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/log_in_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/unexpected_error_text"
+        tools:visibility="visible" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/log_in_button"
         android:layout_width="match_parent"
@@ -73,7 +105,7 @@
         app:icon="@drawable/ic_login_24"
         app:iconGravity="textStart"
         app:layout_constraintBottom_toTopOf="@id/sign_up_button"
-        app:layout_constraintTop_toBottomOf="@id/password_layout" />
+        app:layout_constraintTop_toBottomOf="@id/progress_bar" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/sign_up_button"
@@ -86,8 +118,22 @@
         app:icon="@drawable/ic_person_add_24"
         app:iconGravity="textStart"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/reset_password_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/log_in_button" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/reset_password_button"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:text="@string/reset_password"
+        app:icon="@drawable/ic_lock_reset_24"
+        app:iconGravity="textStart"
+        app:layout_constraintBottom_toBottomOf="@id/sign_up_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/sign_up_button"
+        app:layout_constraintTop_toTopOf="@id/sign_up_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

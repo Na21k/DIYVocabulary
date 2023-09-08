@@ -10,7 +10,14 @@
     <string name="login_hint">Login</string>
     <string name="password_hint">Password</string>
 
+    <!--Validation-->
+    <string name="validation_required">Required</string>
+
     <!--Buttons-->
     <string name="log_in">Log in</string>
     <string name="sign_up">Sign up</string>
+    <string name="reset_password">Reset password</string>
+
+    <!--Alert messages-->
+    <string name="password_reset_email_sent">Password reset email sent. Check your Email.</string>
 </resources>
