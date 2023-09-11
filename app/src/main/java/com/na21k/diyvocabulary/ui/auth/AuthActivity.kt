@@ -1,6 +1,5 @@
 package com.na21k.diyvocabulary.ui.auth
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.ViewPropertyAnimator
@@ -8,9 +7,7 @@ import android.view.inputmethod.EditorInfo.IME_ACTION_GO
 import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsAnimationCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.doAfterTextChanged
@@ -20,10 +17,11 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
+import com.na21k.diyvocabulary.BaseActivity
 import com.na21k.diyvocabulary.R
 import com.na21k.diyvocabulary.databinding.ActivityAuthBinding
 
-class AuthActivity : AppCompatActivity() {
+class AuthActivity : BaseActivity() {
 
     private lateinit var mBinding: ActivityAuthBinding
     private lateinit var mViewModel: AuthActivityViewModel
@@ -42,13 +40,13 @@ class AuthActivity : AppCompatActivity() {
             //not finishing the activity
         }
 
-        takeCareOfWindowInsets()
+        takeCareOfWindowInsets(mBinding.root, true)
         setListeners()
         observeLiveData()
     }
 
-    private fun setListeners() {
-        mBinding.logInButton.setOnClickListener { onLogInClick() }
+    override fun setListeners() {
+        mBinding.signInButton.setOnClickListener { onSignInClick() }
         mBinding.signUpButton.setOnClickListener { onSignUpClick() }
         mBinding.resetPasswordButton.setOnClickListener { onResetPassword() }
         mBinding.loginField.doAfterTextChanged { clearLoginError(); clearUnexpectedError() }
@@ -56,7 +54,7 @@ class AuthActivity : AppCompatActivity() {
         mBinding.passwordField.setOnEditorActionListener(TextView.OnEditorActionListener
         { _, actionId, _ ->
             if (actionId == IME_ACTION_GO && !mIsLoading) {
-                onLogInClick()
+                onSignInClick()
 
                 return@OnEditorActionListener true
             }
@@ -65,7 +63,7 @@ class AuthActivity : AppCompatActivity() {
         })
     }
 
-    private fun onLogInClick() {
+    private fun onSignInClick() {
         val email = mBinding.loginField.text?.toString()
         val password = mBinding.passwordField.text?.toString()
 
@@ -108,30 +106,20 @@ class AuthActivity : AppCompatActivity() {
 
         mViewModel.resetPassword(email, onSuccess = {
             AlertDialog.Builder(this)
-                .setMessage(R.string.password_reset_email_sent)
+                .setMessage(R.string.password_reset_email_sent_alert_message)
                 .setPositiveButton(android.R.string.ok, null)
                 .show()
         })
     }
 
-    private fun switchLoadingModeOn() {
-        disableButtons()
-        mBinding.progressBar.visibility = View.VISIBLE
-    }
-
-    private fun switchLoadingModeOff() {
-        enableButtons()
-        mBinding.progressBar.visibility = View.GONE
-    }
-
-    private fun disableButtons() {
-        mBinding.logInButton.isEnabled = false
+    override fun disableButtons() {
+        mBinding.signInButton.isEnabled = false
         mBinding.signUpButton.isEnabled = false
         mBinding.resetPasswordButton.isEnabled = false
     }
 
-    private fun enableButtons() {
-        mBinding.logInButton.isEnabled = true
+    override fun enableButtons() {
+        mBinding.signInButton.isEnabled = true
         mBinding.signUpButton.isEnabled = true
         mBinding.resetPasswordButton.isEnabled = true
     }
@@ -154,7 +142,7 @@ class AuthActivity : AppCompatActivity() {
         mBinding.unexpectedErrorText.visibility = View.VISIBLE
     }
 
-    private fun observeLiveData() {
+    override fun observeLiveData() {
         mViewModel.error.observe(this) {
             if (it is FirebaseAuthInvalidUserException) {
                 mBinding.loginLayout.error = it.message
@@ -196,7 +184,8 @@ class AuthActivity : AppCompatActivity() {
         }
         mViewModel.isLoading.observe(this) { isLoading: Boolean ->
             mIsLoading = isLoading
-            if (isLoading) switchLoadingModeOn() else switchLoadingModeOff()
+            val progressBar = mBinding.progressBar
+            switchLoadingMode(isLoading, progressBar)
         }
     }
 
@@ -209,7 +198,7 @@ class AuthActivity : AppCompatActivity() {
         val initialDelay = 500L
         animateScale(mBinding.loginLayout, initialDelay)
         animateScale(mBinding.passwordLayout, initialDelay + 50)
-        animateScale(mBinding.logInButton, initialDelay + 100)
+        animateScale(mBinding.signInButton, initialDelay + 100)
         animateScale(mBinding.signUpButton, initialDelay + 150)
         animateScale(mBinding.resetPasswordButton, initialDelay + 150)
     }
@@ -227,22 +216,11 @@ class AuthActivity : AppCompatActivity() {
             }
     }
 
-    private fun takeCareOfWindowInsets() {
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        window.navigationBarColor = Color.TRANSPARENT
-
-        ViewCompat.setOnApplyWindowInsetsListener(mBinding.root) { _, insets ->
-            val i = insets.getInsets(
-                WindowInsetsCompat.Type.systemBars()
-                        or WindowInsetsCompat.Type.ime()
-            )
-
-            mBinding.root.setPadding(i.left, i.top, i.right, i.bottom)
-            WindowInsetsCompat.CONSUMED
-        }
+    override fun takeCareOfWindowInsets(rootView: View, countImeInset: Boolean) {
+        super.takeCareOfWindowInsets(rootView, countImeInset)
 
         val callback = getWindowInsetsAnimationCallback()
-        ViewCompat.setWindowInsetsAnimationCallback(mBinding.root, callback)
+        ViewCompat.setWindowInsetsAnimationCallback(rootView, callback)
     }
 
     private fun getWindowInsetsAnimationCallback(): WindowInsetsAnimationCompat.Callback {
@@ -292,7 +270,7 @@ class AuthActivity : AppCompatActivity() {
         mBinding.passwordLayout.translationY = translationY
         mBinding.unexpectedErrorText.translationY = translationY
         mBinding.progressBar.translationY = translationY
-        mBinding.logInButton.translationY = translationY
+        mBinding.signInButton.translationY = translationY
         mBinding.signUpButton.translationY = translationY
         mBinding.resetPasswordButton.translationY = translationY
     }

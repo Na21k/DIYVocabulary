@@ -2,19 +2,19 @@ package com.na21k.diyvocabulary
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.view.Menu
+import android.view.MenuItem
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.na21k.diyvocabulary.databinding.ActivityMainBinding
-import com.na21k.diyvocabulary.ui.auth.AuthActivity
+import com.na21k.diyvocabulary.helpers.requestAuth
+import com.na21k.diyvocabulary.ui.auth.ProfileActivity
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     private lateinit var mBinding: ActivityMainBinding
     private lateinit var mViewModel: MainActivityViewModel
@@ -46,13 +46,28 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
-        Firebase.auth.signOut() //TODO: remove
-        if (!mViewModel.isUserSignedIn) requestAuth()
+        if (!mViewModel.isUserSignedIn) requestAuth(this)
         else mViewModel.user.let {} //TODO: load data or smth...
     }
 
-    private fun requestAuth() {
-        val authIntent = Intent(this, AuthActivity::class.java)
-        startActivity(authIntent)
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_activity_options_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_profile -> {
+                openProfile()
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun openProfile() {
+        val intent = Intent(this, ProfileActivity::class.java)
+        startActivity(intent)
     }
 }

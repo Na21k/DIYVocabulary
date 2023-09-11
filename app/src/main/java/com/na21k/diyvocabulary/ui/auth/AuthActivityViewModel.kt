@@ -1,21 +1,13 @@
 package com.na21k.diyvocabulary.ui.auth
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import android.app.Application
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.na21k.diyvocabulary.BaseViewModel
 
-class AuthActivityViewModel : ViewModel() {
+class AuthActivityViewModel(application: Application) : BaseViewModel(application) {
 
     private val mAuth = Firebase.auth
-    private val _error =
-        MutableLiveData<Exception?>()
-    private val _isLoading = MutableLiveData(false)
-    val error: LiveData<Exception?>
-        get() = _error
-    val isLoading: LiveData<Boolean>
-        get() = _isLoading
 
     fun signUpWithEmailAndPassword(email: String, password: String, onSuccess: Runnable) {
         _isLoading.postValue(true)

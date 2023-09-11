@@ -5,19 +5,48 @@
     <string name="title_home">Home</string>
     <string name="title_tags">Tags</string>
     <string name="title_authentication">Log in or sign up</string>
+    <string name="title_profile">Profile</string>
 
     <!--Hints-->
     <string name="login_hint">Login</string>
     <string name="password_hint">Password</string>
+    <string name="new_password_hint">New password</string>
+    <string name="new_email_hint">New email</string>
 
     <!--Validation-->
     <string name="validation_required">Required</string>
 
+    <!--Errors-->
+    <string name="unexpected_error_occurred">An unexpected error has occurred</string>
+    <string name="not_authenticated">Not authenticated. Log in and try again</string>
+
+    <!--Labels-->
+    <string name="greeting_formatted">Hello, %1$s</string>
+
     <!--Buttons-->
-    <string name="log_in">Log in</string>
+    <string name="sign_in">Log in</string>
     <string name="sign_up">Sign up</string>
+    <string name="sign_out">Log out</string>
     <string name="reset_password">Reset password</string>
+    <string name="change_email">Change email</string>
+    <string name="change_password">Change password</string>
+    <string name="delete_account">Delete account</string>
+
+    <!--Alert titles-->
+    <string name="error_alert_title">Error</string>
 
     <!--Alert messages-->
-    <string name="password_reset_email_sent">Password reset email sent. Check your Email.</string>
+    <string name="password_reset_email_sent_alert_message">Password reset email sent. Check your Email</string>
+    <string name="delete_account_confirmation_alert_message">Delete account? This action cannot be undone</string>
+    <string name="password_cannot_be_empty_alert_message">The password cannot be empty, try again</string>
+    <string name="email_cannot_be_empty_alert_message">The email address cannot be empty, try again</string>
+
+    <!--Options menu items-->
+    <string name="profile_options_menu_item">Profile</string>
+
+    <!--Other-->
+    <string name="navigate_up_content_description">Navigate up</string>
+    <string name="reauthentication_successful">Reauthenticated successfully, you can now update your profile setting</string>
+    <string name="password_updated_successfully">Password updated successfully</string>
+    <string name="email_updated_successfully">Email updated successfully</string>
 </resources>
