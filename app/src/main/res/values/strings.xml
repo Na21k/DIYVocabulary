@@ -3,6 +3,7 @@
 
     <!--Activity titles-->
     <string name="title_home">Home</string>
+    <string name="title_word">Word</string>
     <string name="title_tags">Tags</string>
     <string name="title_authentication">Log in or sign up</string>
     <string name="title_profile">Profile</string>
@@ -13,6 +14,11 @@
     <string name="new_password_hint">New password</string>
     <string name="new_email_hint">New email</string>
     <string name="tag_title_hint">Title</string>
+    <string name="word_hint">Word or phrase</string>
+    <string name="transcription_hint">Transcription (optional)</string>
+    <string name="translation_hint">Translation(s) (optional)</string>
+    <string name="explanation_hint">Explanation(s) (optional)</string>
+    <string name="usage_example_hint">Usage example(s) (optional)</string>
 
     <!--Validation-->
     <string name="validation_required">Required</string>
@@ -24,6 +30,7 @@
     <!--Labels-->
     <string name="greeting_formatted">Hello, %1$s</string>
     <string name="image_count_formatted">x%1$d</string>
+    <string name="usage_example_images">Usage example images</string>
 
     <!--Buttons-->
     <string name="sign_in">Log in</string>
