@@ -79,6 +79,8 @@ class TagDialogFragment : DialogFragment() {
                     .setMessage(exception?.message.toString())
                     .setPositiveButton(android.R.string.ok) { _, _ -> }
                     .show()
+
+                dismiss()
             }
         })
     }
