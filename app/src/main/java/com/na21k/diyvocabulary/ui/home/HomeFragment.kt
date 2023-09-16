@@ -1,5 +1,6 @@
 package com.na21k.diyvocabulary.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -49,7 +50,10 @@ class HomeFragment : BaseFragment(), WordsListAdapter.OnWordActionListener {
     }
 
     override fun setListeners() {
-
+        mBinding.addWordFab.setOnClickListener {
+            val addWordIntent = Intent(context, WordActivity::class.java)
+            startActivity(addWordIntent)
+        }
     }
 
     override fun observeLiveData() {
