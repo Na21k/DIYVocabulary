@@ -20,7 +20,7 @@ import com.na21k.diyvocabulary.helpers.showErrorAlertDialog
 class ProfileActivity : BaseActivity() {
 
     private lateinit var mBinding: ActivityProfileBinding
-    private lateinit var mViewModel: ProfileViewModel
+    private lateinit var mViewModel: ProfileActivityViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +29,7 @@ class ProfileActivity : BaseActivity() {
         setContentView(mBinding.root)
         setSupportActionBar(mBinding.appBar.appBar)
 
-        mViewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
+        mViewModel = ViewModelProvider(this)[ProfileActivityViewModel::class.java]
 
         enableUpNavigation(mBinding.appBar.appBar)
         takeCareOfWindowInsets(mBinding.root)

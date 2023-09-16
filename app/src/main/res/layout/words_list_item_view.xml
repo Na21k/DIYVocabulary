@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/words_list_item_card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+    android:layout_marginVertical="@dimen/list_item_vertical_margin"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:hapticFeedbackEnabled="true"
+    android:longClickable="true"
+    app:cardCornerRadius="@dimen/corner_radius"
+    app:cardElevation="@dimen/elevation">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="14dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/word"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textSize="22sp"
+            tools:text="Word or phrase" />
+
+        <TextView
+            android:id="@+id/transcription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="16sp"
+            tools:text="transcription" />
+
+        <TextView
+            android:id="@+id/translation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textSize="18sp"
+            tools:text="Word or phrase translation(s)" />
+
+        <TextView
+            android:id="@+id/explanation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:textSize="16sp"
+            tools:text="Word or phrase explanation" />
+
+        <TextView
+            android:id="@+id/attached_images_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:drawablePadding="4dp"
+            android:textSize="16sp"
+            app:drawableStartCompat="@drawable/ic_image_24"
+            tools:text="3" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

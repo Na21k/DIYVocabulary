@@ -12,12 +12,14 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.na21k.diyvocabulary.databinding.ActivityMainBinding
 import com.na21k.diyvocabulary.helpers.requestAuth
+import com.na21k.diyvocabulary.model.TagModel
 import com.na21k.diyvocabulary.ui.auth.ProfileActivity
+import com.na21k.diyvocabulary.ui.tags.tagDialog.TagDialogFragment
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(), TagDialogFragment.OnTagDialogFragmentActionListener {
 
     private lateinit var mBinding: ActivityMainBinding
-    private lateinit var mViewModel: MainActivityViewModel
+    private lateinit var mViewModel: MainActivitySharedViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,14 +42,19 @@ class MainActivity : BaseActivity() {
         val navView: BottomNavigationView = mBinding.navView
         navView.setupWithNavController(navController)
 
-        mViewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
+        mViewModel = ViewModelProvider(this)[MainActivitySharedViewModel::class.java]
     }
 
     override fun onStart() {
         super.onStart()
 
         if (!mViewModel.isUserSignedIn) requestAuth(this)
-        else mViewModel.user.let {} //TODO: load data or smth...
+        else mViewModel.startObservingData()
+    }
+
+    override fun onStop() {
+        mViewModel.stopObservingData()
+        super.onStop()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -69,5 +76,13 @@ class MainActivity : BaseActivity() {
     private fun openProfile() {
         val intent = Intent(this, ProfileActivity::class.java)
         startActivity(intent)
+    }
+
+    override fun onSaveTag(tag: TagModel) {
+        mViewModel.saveTag(tag)
+    }
+
+    override fun onDeleteTag(tag: TagModel) {
+        mViewModel.deleteTag(tag)
     }
 }

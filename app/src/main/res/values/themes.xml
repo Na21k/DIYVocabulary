@@ -51,4 +51,9 @@
         <item name="boxStrokeWidth">@dimen/stroke_width_text_input_layout</item>
         <item name="boxStrokeWidthFocused">@dimen/stroke_width_text_input_layout</item>
     </style>
+
+    <style name="extendedFabShapeAppearanceOverlay">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/corner_radius</item>
+    </style>
 </resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingHorizontal="@dimen/activity_horizontal_margin"
+    android:paddingVertical="@dimen/activity_vertical_margin">
+
+    <EditText
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/tag_title_hint"
+        android:imeOptions="actionDone"
+        android:importantForAutofill="no"
+        android:inputType="textCapSentences"
+        android:maxLines="1" />
+
+</FrameLayout>

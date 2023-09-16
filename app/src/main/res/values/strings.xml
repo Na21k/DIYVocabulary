@@ -12,6 +12,7 @@
     <string name="password_hint">Password</string>
     <string name="new_password_hint">New password</string>
     <string name="new_email_hint">New email</string>
+    <string name="tag_title_hint">Title</string>
 
     <!--Validation-->
     <string name="validation_required">Required</string>
@@ -22,6 +23,7 @@
 
     <!--Labels-->
     <string name="greeting_formatted">Hello, %1$s</string>
+    <string name="image_count_formatted">x%1$d</string>
 
     <!--Buttons-->
     <string name="sign_in">Log in</string>
@@ -31,6 +33,11 @@
     <string name="change_email">Change email</string>
     <string name="change_password">Change password</string>
     <string name="delete_account">Delete account</string>
+    <string name="delete">Delete</string>
+
+    <!--Floating action buttons-->
+    <string name="add_word">Add word</string>
+    <string name="add_tag">Add tag</string>
 
     <!--Alert titles-->
     <string name="error_alert_title">Error</string>
