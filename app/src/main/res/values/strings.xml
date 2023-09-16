@@ -31,6 +31,7 @@
     <string name="greeting_formatted">Hello, %1$s</string>
     <string name="image_count_formatted">x%1$d</string>
     <string name="usage_example_images">Usage example images</string>
+    <string name="last_modified_formatted">Last modified: %1$s</string>
 
     <!--Buttons-->
     <string name="sign_in">Log in</string>
