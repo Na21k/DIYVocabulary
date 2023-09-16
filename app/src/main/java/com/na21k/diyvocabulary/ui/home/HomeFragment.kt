@@ -70,7 +70,10 @@ class HomeFragment : BaseFragment(), WordsListAdapter.OnWordActionListener {
     }
 
     override fun wordOpen(word: WordModel) {
-        TODO("Not yet implemented")
+        val addWordIntent = Intent(context, WordActivity::class.java)
+        val options = Bundle()
+        options.putString(WORD_DOCUMENT_ID_ARG_KEY, word.id)
+        startActivity(addWordIntent, options)
     }
 
     override fun wordDelete(word: WordModel) {

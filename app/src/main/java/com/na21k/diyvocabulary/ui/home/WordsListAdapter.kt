@@ -50,6 +50,10 @@ class WordsListAdapter(private val mOnWordActionListener: OnWordActionListener) 
                 binding.root.resources.getString(R.string.image_count_formatted, 100500)
 
             updateViewsVisibility()
+
+            itemView.setOnClickListener {
+                mOnWordActionListener.wordOpen(item)
+            }
         }
 
         private fun updateViewsVisibility() {
