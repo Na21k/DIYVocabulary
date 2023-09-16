@@ -12,21 +12,11 @@ import com.na21k.diyvocabulary.MainActivitySharedViewModel
 import com.na21k.diyvocabulary.databinding.FragmentHomeBinding
 import com.na21k.diyvocabulary.model.WordModel
 
-class HomeFragment : BaseFragment() {
+class HomeFragment : BaseFragment(), WordsListAdapter.OnWordActionListener {
 
     private lateinit var mBinding: FragmentHomeBinding
     private lateinit var mViewModel: MainActivitySharedViewModel
     private lateinit var mListAdapter: WordsListAdapter
-
-    private object OnWordActionListener : WordsListAdapter.OnWordActionListener {
-        override fun wordOpen(word: WordModel) {
-            TODO("Not yet implemented")
-        }
-
-        override fun wordDelete(word: WordModel) {
-            TODO("Not yet implemented")
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +41,7 @@ class HomeFragment : BaseFragment() {
 
     private fun setUpRecyclerView(): WordsListAdapter {
         val rv = mBinding.wordsListRecyclerView
-        val adapter = WordsListAdapter(OnWordActionListener)
+        val adapter = WordsListAdapter(this)
         rv.adapter = adapter
         rv.layoutManager = LinearLayoutManager(context)
 
@@ -73,5 +63,13 @@ class HomeFragment : BaseFragment() {
         mViewModel.wordsWithTags.observe(viewLifecycleOwner) {
             mListAdapter.setItems(it)
         }
+    }
+
+    override fun wordOpen(word: WordModel) {
+        TODO("Not yet implemented")
+    }
+
+    override fun wordDelete(word: WordModel) {
+        mViewModel.deleteWord(word)
     }
 }

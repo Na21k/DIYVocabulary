@@ -137,6 +137,23 @@ class MainActivitySharedViewModel(application: Application) : BaseViewModel(appl
         _wordsWithTags.postValue(wordsWithTags)
     }
 
+    fun deleteWord(word: WordModel) {
+        val user = mUser
+
+        if (!ensureSignedIn(user)) {
+            return
+        }
+
+        val documentId = word.id ?: return
+
+        mDb.collection(WORDS_COLLECTION_NAME)
+            .document(documentId)
+            .delete()
+            .addOnFailureListener {
+                _error.postValue(it)
+            }
+    }
+
     fun saveTag(tag: TagModel) {
         val user = mUser
 

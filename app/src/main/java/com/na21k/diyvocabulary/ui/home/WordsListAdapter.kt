@@ -34,10 +34,14 @@ class WordsListAdapter(private val mOnWordActionListener: OnWordActionListener) 
         notifyDataSetChanged()
     }
 
-    class WordViewHolder(private val binding: WordsListItemViewBinding) :
-        BaseViewHolder(binding.root, 0, 0) {
+    inner class WordViewHolder(private val binding: WordsListItemViewBinding) :
+        BaseViewHolder(binding.root, R.menu.word_context_menu, 0) {
+
+        private lateinit var mItemModel: WordModel
 
         fun setData(item: WordModel) {
+            mItemModel = item
+
             binding.word.text = item.word
             binding.transcription.text = item.transcription
             binding.translation.text = item.translation
@@ -45,18 +49,25 @@ class WordsListAdapter(private val mOnWordActionListener: OnWordActionListener) 
             binding.attachedImagesCount.text =
                 binding.root.resources.getString(R.string.image_count_formatted, 100500)
 
-            updateViewsVisibility(item)
+            updateViewsVisibility()
         }
 
-        private fun updateViewsVisibility(item: WordModel) {
-            binding.transcription.isVisible = !item.transcription.isNullOrEmpty()
-            binding.translation.isVisible = !item.translation.isNullOrEmpty()
-            binding.explanation.isVisible = !item.explanation.isNullOrEmpty()
+        private fun updateViewsVisibility() {
+            binding.transcription.isVisible = !mItemModel.transcription.isNullOrEmpty()
+            binding.translation.isVisible = !mItemModel.translation.isNullOrEmpty()
+            binding.explanation.isVisible = !mItemModel.explanation.isNullOrEmpty()
             binding.attachedImagesCount.isVisible = true    //TODO if images count > 0
         }
 
         override fun onMenuItemClick(item: MenuItem): Boolean {
-            TODO("Not yet implemented")
+            return when (item.itemId) {
+                R.id.delete -> {
+                    mOnWordActionListener.wordDelete(mItemModel)
+                    true
+                }
+
+                else -> false
+            }
         }
     }
 
