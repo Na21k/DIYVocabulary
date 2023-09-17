@@ -1,8 +1,9 @@
 package com.na21k.diyvocabulary.model
 
 import com.na21k.diyvocabulary.TITLE_FIELD_NAME
+import java.io.Serializable
 
-class TagModel : UserOwnedModel() {
+class TagModel : UserOwnedModel(), Serializable {
 
     var title: String? = null
 

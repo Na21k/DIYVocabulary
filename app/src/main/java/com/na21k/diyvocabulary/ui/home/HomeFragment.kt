@@ -71,7 +71,7 @@ class HomeFragment : BaseFragment(), WordsListAdapter.OnWordActionListener {
 
     override fun wordOpen(word: WordModel) {
         val addWordIntent = Intent(context, WordActivity::class.java)
-        addWordIntent.putExtra(WORD_DOCUMENT_ID_ARG_KEY, word.id)
+        addWordIntent.putExtra(WORD_MODEL_ARG_KEY, word)
         startActivity(addWordIntent)
     }
 

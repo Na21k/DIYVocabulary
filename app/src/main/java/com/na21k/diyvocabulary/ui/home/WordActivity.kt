@@ -1,22 +1,28 @@
 package com.na21k.diyvocabulary.ui.home
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.widget.EditText
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.snackbar.Snackbar
 import com.na21k.diyvocabulary.BaseActivity
 import com.na21k.diyvocabulary.R
 import com.na21k.diyvocabulary.databinding.ActivityWordBinding
 import com.na21k.diyvocabulary.model.WordModel
 import java.text.DateFormat
 
-const val WORD_DOCUMENT_ID_ARG_KEY = "wordDocumentIdArgKey"
+const val WORD_MODEL_ARG_KEY = "wordModelArgKey"
 
-class WordActivity : BaseActivity(), WordActivityViewModel.OnFetchListener {
+class WordActivity : BaseActivity() {
 
     private lateinit var mBinding: ActivityWordBinding
     private lateinit var mViewModel: WordActivityViewModel
-    private val wordDocumentId get() = intent.extras?.getString(WORD_DOCUMENT_ID_ARG_KEY)
+    private val wordExtra: WordModel?
+        get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.extras?.getSerializable(WORD_MODEL_ARG_KEY, WordModel::class.java)
+        } else {
+            intent.extras?.getSerializable(WORD_MODEL_ARG_KEY) as WordModel?
+        }
     private var mWord = WordModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,29 +35,23 @@ class WordActivity : BaseActivity(), WordActivityViewModel.OnFetchListener {
         mViewModel = ViewModelProvider(this)[WordActivityViewModel::class.java]
 
         enableUpNavigation(mBinding.appBar.appBar)
-
-        val isExistingDocument = wordDocumentId != null
-
-        if (isExistingDocument) {
-            fetchWord()
-        }
+        displayIfExistingDocument()
     }
 
-    private fun fetchWord() {
-        mViewModel.fetchWord(wordDocumentId!!, this)
-    }
+    private fun displayIfExistingDocument() {
+        val word = wordExtra
+        val isExistingDocument = word != null
 
-    override fun onFetched(word: WordModel?) {
-        if (word == null) {
+        if (!isExistingDocument) {
             return
         }
 
-        mWord = word
-        mBinding.word.setText(word.word)
-        mBinding.transcription.setText(word.transcription)
-        mBinding.translation.setText(word.translation)
-        mBinding.explanation.setText(word.explanation)
-        mBinding.usageExample.setText(word.usageExample)
+        mWord = word!!
+        setTextIfEmpty(mBinding.word, word.word)
+        setTextIfEmpty(mBinding.transcription, word.transcription)
+        setTextIfEmpty(mBinding.translation, word.translation)
+        setTextIfEmpty(mBinding.explanation, word.explanation)
+        setTextIfEmpty(mBinding.usageExample, word.usageExample)
         mBinding.lastModified.text = getString(
             R.string.last_modified_formatted,
             word.lastModified?.toDate()?.let { DateFormat.getDateTimeInstance().format(it) }
@@ -60,8 +60,9 @@ class WordActivity : BaseActivity(), WordActivityViewModel.OnFetchListener {
         mBinding.lastModified.visibility = View.VISIBLE
     }
 
-    override fun onError(exception: Exception?) {
-        Snackbar.make(mBinding.root, exception?.message.toString(), Snackbar.LENGTH_INDEFINITE)
-            .show()
+    private fun setTextIfEmpty(editText: EditText, newText: String?) {
+        if (editText.text.isEmpty()) {
+            editText.setText(newText)
+        }
     }
 }

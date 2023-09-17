@@ -2,6 +2,8 @@ package com.na21k.diyvocabulary.model
 
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.na21k.diyvocabulary.EXPLANATION_FIELD_NAME
 import com.na21k.diyvocabulary.LAST_MODIFIED_FIELD_NAME
 import com.na21k.diyvocabulary.TAGS_FIELD_NAME
@@ -9,8 +11,9 @@ import com.na21k.diyvocabulary.TRANSCRIPTION_FIELD_NAME
 import com.na21k.diyvocabulary.TRANSLATION_FIELD_NAME
 import com.na21k.diyvocabulary.USAGE_EXAMPLE_FIELD_NAME
 import com.na21k.diyvocabulary.WORD_FIELD_NAME
+import java.io.Serializable
 
-class WordModel : UserOwnedModel() {
+class WordModel : UserOwnedModel(), Serializable {
 
     var word: String? = null
     var transcription: String? = null
@@ -37,5 +40,40 @@ class WordModel : UserOwnedModel() {
         )
 
         return res
+    }
+
+    private fun writeObject(outObj: java.io.ObjectOutputStream) {
+        outObj.writeObject(id)
+        outObj.writeObject(userId)
+        outObj.writeObject(word)
+        outObj.writeObject(transcription)
+        outObj.writeObject(translation)
+        outObj.writeObject(explanation)
+        outObj.writeObject(usageExample)
+        outObj.writeObject(lastModified?.seconds)
+        outObj.writeObject(lastModified?.nanoseconds)
+        outObj.writeObject(tagModels)
+        outObj.writeObject(tags?.map {
+            it.path
+        })
+    }
+
+    private fun readObject(inObj: java.io.ObjectInputStream) {
+        id = inObj.readObject() as String?
+        userId = inObj.readObject() as String?
+        word = inObj.readObject() as String?
+        transcription = inObj.readObject() as String?
+        translation = inObj.readObject() as String?
+        explanation = inObj.readObject() as String?
+        usageExample = inObj.readObject() as String?
+
+        val lastModifiedSeconds = inObj.readObject() as Long?
+        val lastModifiedNanoseconds = inObj.readObject() as Int?
+
+        lastModified = Timestamp(lastModifiedSeconds ?: 0, lastModifiedNanoseconds ?: 0)
+        tagModels = inObj.readObject() as List<TagModel>?
+        tags = (inObj.readObject() as List<String>?)?.map {
+            Firebase.firestore.document(it)
+        }
     }
 }
