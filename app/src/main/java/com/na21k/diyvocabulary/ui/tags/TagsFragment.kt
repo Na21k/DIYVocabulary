@@ -11,7 +11,7 @@ import com.na21k.diyvocabulary.BaseFragment
 import com.na21k.diyvocabulary.MainActivitySharedViewModel
 import com.na21k.diyvocabulary.databinding.FragmentTagsBinding
 import com.na21k.diyvocabulary.model.TagModel
-import com.na21k.diyvocabulary.ui.tags.tagDialog.TAG_DOCUMENT_ID_ARG_KEY
+import com.na21k.diyvocabulary.ui.tags.tagDialog.TAG_MODEL_ARG_KEY
 import com.na21k.diyvocabulary.ui.tags.tagDialog.TagDialogFragment
 
 class TagsFragment : BaseFragment(), TagsListAdapter.OnTagActionListener {
@@ -74,7 +74,7 @@ class TagsFragment : BaseFragment(), TagsListAdapter.OnTagActionListener {
         val tagDialog = TagDialogFragment()
 
         val argsBundle = Bundle()
-        argsBundle.putString(TAG_DOCUMENT_ID_ARG_KEY, tag.id)
+        argsBundle.putSerializable(TAG_MODEL_ARG_KEY, tag)
         tagDialog.arguments = argsBundle
 
         tagDialog.show(parentFragmentManager, null)

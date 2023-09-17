@@ -3,22 +3,29 @@ package com.na21k.diyvocabulary.ui.tags.tagDialog
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.na21k.diyvocabulary.R
 import com.na21k.diyvocabulary.databinding.FragmentTagDialogBinding
+import com.na21k.diyvocabulary.helpers.setTextIfEmpty
 import com.na21k.diyvocabulary.model.TagModel
 
-const val TAG_DOCUMENT_ID_ARG_KEY = "tagDocumentIdArgKey"
+const val TAG_MODEL_ARG_KEY = "tagModelArgKey"
 
 class TagDialogFragment : DialogFragment() {
 
     private lateinit var mBinding: FragmentTagDialogBinding
     private lateinit var mViewModel: TagDialogFragmentViewModel
     private lateinit var mOnDialogActionListener: OnTagDialogFragmentActionListener
-    private val tagDocumentId get() = arguments?.getString(TAG_DOCUMENT_ID_ARG_KEY)
+    private val tagArg
+        get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arguments?.getSerializable(TAG_MODEL_ARG_KEY, TagModel::class.java)
+        } else {
+            arguments?.getSerializable(TAG_MODEL_ARG_KEY) as TagModel?
+        }
     private var mTag: TagModel = TagModel()
 
     override fun onAttach(context: Context) {
@@ -55,34 +62,22 @@ class TagDialogFragment : DialogFragment() {
         val dialog = dialogBuilder.create()
         dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
 
-        val isExistingDocument = tagDocumentId != null
-
-        if (isExistingDocument) {
-            fetchTag()
-        }
+        displayIfExistingDocument()
 
         return dialog
     }
 
-    private fun fetchTag() {
-        mViewModel.fetchTag(tagDocumentId!!, object : TagDialogFragmentViewModel.OnFetchListener {
-            override fun onFetched(tag: TagModel?) {
-                if (tag != null) {
-                    mTag = tag
-                    mBinding.title.setText(tag.title)
-                    mBinding.title.selectAll()
-                }
-            }
+    private fun displayIfExistingDocument() {
+        val tag = tagArg
+        val isExistingDocument = tag != null
 
-            override fun onError(exception: Exception?) {
-                AlertDialog.Builder(context)
-                    .setMessage(exception?.message.toString())
-                    .setPositiveButton(android.R.string.ok) { _, _ -> }
-                    .show()
+        if (!isExistingDocument) {
+            return
+        }
 
-                dismiss()
-            }
-        })
+        mTag = tag!!
+        setTextIfEmpty(mBinding.title, tag.title)
+        mBinding.title.selectAll()
     }
 
     interface OnTagDialogFragmentActionListener {

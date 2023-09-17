@@ -3,11 +3,11 @@ package com.na21k.diyvocabulary.ui.home
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.widget.EditText
 import androidx.lifecycle.ViewModelProvider
 import com.na21k.diyvocabulary.BaseActivity
 import com.na21k.diyvocabulary.R
 import com.na21k.diyvocabulary.databinding.ActivityWordBinding
+import com.na21k.diyvocabulary.helpers.setTextIfEmpty
 import com.na21k.diyvocabulary.model.WordModel
 import java.text.DateFormat
 
@@ -35,6 +35,7 @@ class WordActivity : BaseActivity() {
         mViewModel = ViewModelProvider(this)[WordActivityViewModel::class.java]
 
         enableUpNavigation(mBinding.appBar.appBar)
+
         displayIfExistingDocument()
     }
 
@@ -58,11 +59,5 @@ class WordActivity : BaseActivity() {
         )
 
         mBinding.lastModified.visibility = View.VISIBLE
-    }
-
-    private fun setTextIfEmpty(editText: EditText, newText: String?) {
-        if (editText.text.isEmpty()) {
-            editText.setText(newText)
-        }
     }
 }
