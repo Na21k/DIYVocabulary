@@ -2,6 +2,8 @@ package com.na21k.diyvocabulary.ui.home
 
 import android.os.Build
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import com.na21k.diyvocabulary.BaseActivity
@@ -23,6 +25,7 @@ class WordActivity : BaseActivity() {
         } else {
             intent.extras?.getSerializable(WORD_MODEL_ARG_KEY) as WordModel?
         }
+    private val isExistingDocument get() = wordExtra != null
     private var mWord = WordModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,13 +42,38 @@ class WordActivity : BaseActivity() {
         displayIfExistingDocument()
     }
 
-    private fun displayIfExistingDocument() {
-        val word = wordExtra
-        val isExistingDocument = word != null
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.word_activity_options_menu, menu)
 
+        if (!isExistingDocument) {
+            menu?.removeItem(R.id.delete)
+        }
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.save -> {
+                save()
+                true
+            }
+
+            R.id.delete -> {
+                delete()
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun displayIfExistingDocument() {
         if (!isExistingDocument) {
             return
         }
+
+        val word = wordExtra
 
         mWord = word!!
         setTextIfEmpty(mBinding.word, word.word)
@@ -59,5 +87,26 @@ class WordActivity : BaseActivity() {
         )
 
         mBinding.lastModified.visibility = View.VISIBLE
+    }
+
+    private fun save() {
+        if (mBinding.word.text.isNullOrBlank()) {
+            mBinding.wordLayout.error = getString(R.string.validation_required)
+            return
+        }
+
+        mWord.word = mBinding.word.text.toString()
+        mWord.transcription = mBinding.transcription.text.toString()
+        mWord.translation = mBinding.translation.text.toString()
+        mWord.explanation = mBinding.explanation.text.toString()
+        mWord.usageExample = mBinding.usageExample.text.toString()
+
+        mViewModel.save(mWord)
+        finish()
+    }
+
+    private fun delete() {
+        mViewModel.delete(mWord)
+        finish()
     }
 }

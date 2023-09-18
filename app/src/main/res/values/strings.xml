@@ -58,6 +58,8 @@
 
     <!--Options menu items-->
     <string name="profile_options_menu_item">Profile</string>
+    <string name="save_options_menu_item">Save</string>
+    <string name="delete_options_menu_item">Delete</string>
 
     <!--Other-->
     <string name="navigate_up_content_description">Navigate up</string>
