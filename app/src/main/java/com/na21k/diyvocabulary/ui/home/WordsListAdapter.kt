@@ -7,7 +7,9 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.na21k.diyvocabulary.BaseViewHolder
 import com.na21k.diyvocabulary.R
+import com.na21k.diyvocabulary.databinding.WordsListItemTagChipViewBinding
 import com.na21k.diyvocabulary.databinding.WordsListItemViewBinding
+import com.na21k.diyvocabulary.model.TagModel
 import com.na21k.diyvocabulary.model.WordModel
 
 class WordsListAdapter(private val mOnWordActionListener: OnWordActionListener) :
@@ -50,6 +52,7 @@ class WordsListAdapter(private val mOnWordActionListener: OnWordActionListener) 
                 binding.root.resources.getString(R.string.image_count_formatted, 100500)
 
             updateViewsVisibility()
+            updateTags(item.tagModels)
 
             itemView.setOnClickListener {
                 mOnWordActionListener.wordOpen(item)
@@ -61,6 +64,18 @@ class WordsListAdapter(private val mOnWordActionListener: OnWordActionListener) 
             binding.translation.isVisible = !mItemModel.translation.isNullOrEmpty()
             binding.explanation.isVisible = !mItemModel.explanation.isNullOrEmpty()
             binding.attachedImagesCount.isVisible = true    //TODO if images count > 0
+        }
+
+        private fun updateTags(tagModels: List<TagModel>?) {
+            binding.tags.removeAllViews()
+
+            tagModels?.forEach { tagModel ->
+                val inflater = LayoutInflater.from(itemView.context)
+                val tagBinding = WordsListItemTagChipViewBinding.inflate(inflater)
+                tagBinding.root.text = tagModel.title
+
+                binding.tags.addView(tagBinding.root)
+            }
         }
 
         override fun onMenuItemClick(item: MenuItem): Boolean {

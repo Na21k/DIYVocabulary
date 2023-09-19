@@ -71,6 +71,19 @@
             app:drawableStartCompat="@drawable/ic_image_24"
             tools:text="3" />
 
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/tags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:chipSpacingVertical="0dp">
+
+            <include
+                layout="@layout/words_list_item_tag_chip_view"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+        </com.google.android.material.chip.ChipGroup>
+
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>
