@@ -66,4 +66,5 @@
     <string name="reauthentication_successful">Reauthenticated successfully, you can now update your profile setting</string>
     <string name="password_updated_successfully">Password updated successfully</string>
     <string name="email_updated_successfully">Email updated successfully</string>
+    <string name="add_tag_chip">Add tag</string>
 </resources>

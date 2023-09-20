@@ -11,9 +11,8 @@ import com.na21k.diyvocabulary.TRANSCRIPTION_FIELD_NAME
 import com.na21k.diyvocabulary.TRANSLATION_FIELD_NAME
 import com.na21k.diyvocabulary.USAGE_EXAMPLE_FIELD_NAME
 import com.na21k.diyvocabulary.WORD_FIELD_NAME
-import java.io.Serializable
 
-class WordModel : UserOwnedModel(), Serializable {
+class WordModel : UserOwnedModel() {
 
     var word: String? = null
     var transcription: String? = null
@@ -23,6 +22,19 @@ class WordModel : UserOwnedModel(), Serializable {
     var lastModified: Timestamp? = null
     var tagModels: List<TagModel>? = null
     var tags: List<DocumentReference>? = null
+
+    fun removeTag(tagModel: TagModel) {
+        val newTagModels = mutableListOf<TagModel>()
+        val newTags = mutableListOf<DocumentReference>()
+        tagModels?.let { newTagModels.addAll(it) }
+        tags?.let { newTags.addAll(it) }
+
+        newTagModels.remove(tagModel)
+        newTags.removeIf { it.id == tagModel.id }
+
+        tagModels = newTagModels
+        tags = newTags
+    }
 
     override fun toMap(): Map<String, Any?> {
         val res = mutableMapOf<String, Any?>()

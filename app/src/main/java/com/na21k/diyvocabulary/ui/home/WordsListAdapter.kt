@@ -7,7 +7,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.na21k.diyvocabulary.BaseViewHolder
 import com.na21k.diyvocabulary.R
-import com.na21k.diyvocabulary.databinding.WordsListItemTagChipViewBinding
+import com.na21k.diyvocabulary.databinding.TagChipViewBinding
 import com.na21k.diyvocabulary.databinding.WordsListItemViewBinding
 import com.na21k.diyvocabulary.model.TagModel
 import com.na21k.diyvocabulary.model.WordModel
@@ -71,7 +71,7 @@ class WordsListAdapter(private val mOnWordActionListener: OnWordActionListener) 
 
             tagModels?.forEach { tagModel ->
                 val inflater = LayoutInflater.from(itemView.context)
-                val tagBinding = WordsListItemTagChipViewBinding.inflate(inflater)
+                val tagBinding = TagChipViewBinding.inflate(inflater)
                 tagBinding.root.text = tagModel.title
 
                 binding.tags.addView(tagBinding.root)

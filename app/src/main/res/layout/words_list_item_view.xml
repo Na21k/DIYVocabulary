@@ -78,7 +78,7 @@
             app:chipSpacingVertical="0dp">
 
             <include
-                layout="@layout/words_list_item_tag_chip_view"
+                layout="@layout/tag_chip_view"
                 android:visibility="gone"
                 tools:visibility="visible" />
 

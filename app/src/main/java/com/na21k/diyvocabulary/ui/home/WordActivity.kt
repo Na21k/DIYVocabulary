@@ -5,11 +5,15 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.chip.Chip
 import com.na21k.diyvocabulary.BaseActivity
 import com.na21k.diyvocabulary.R
 import com.na21k.diyvocabulary.databinding.ActivityWordBinding
+import com.na21k.diyvocabulary.databinding.TagChipViewBinding
 import com.na21k.diyvocabulary.helpers.setTextIfEmpty
+import com.na21k.diyvocabulary.model.TagModel
 import com.na21k.diyvocabulary.model.WordModel
 import java.text.DateFormat
 
@@ -40,6 +44,7 @@ class WordActivity : BaseActivity() {
         enableUpNavigation(mBinding.appBar.appBar)
 
         displayIfExistingDocument()
+        displayTags()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -87,6 +92,44 @@ class WordActivity : BaseActivity() {
         )
 
         mBinding.lastModified.visibility = View.VISIBLE
+    }
+
+    private fun displayTags() {
+        mBinding.tags.removeAllViews()
+
+        mWord.tagModels?.forEach { tagModel ->
+            val tagChipBinding = TagChipViewBinding.inflate(layoutInflater)
+            tagChipBinding.root.text = tagModel.title
+            tagChipBinding.root.closeIcon =
+                AppCompatResources.getDrawable(this, R.drawable.ic_remove_24)
+            tagChipBinding.root.isCloseIconVisible = true
+
+            tagChipBinding.root.setOnCloseIconClickListener {
+                removeTag(tagModel, tagChipBinding.root)
+            }
+
+            mBinding.tags.addView(tagChipBinding.root)
+        }
+
+        displayAddTagChip()
+    }
+
+    private fun removeTag(tagModel: TagModel, tagChip: Chip) {
+        mWord.removeTag(tagModel)
+        mBinding.tags.removeView(tagChip)
+    }
+
+    private fun displayAddTagChip() {
+        val addTagChipBinding = TagChipViewBinding.inflate(layoutInflater)
+        addTagChipBinding.root.text = getString(R.string.add_tag_chip)
+        addTagChipBinding.root.chipIcon =
+            AppCompatResources.getDrawable(this, R.drawable.ic_add_24)
+
+        addTagChipBinding.root.setOnClickListener {
+            //TODO: open a dialog or smth
+        }
+
+        mBinding.tags.addView(addTagChipBinding.root)
     }
 
     private fun save() {
