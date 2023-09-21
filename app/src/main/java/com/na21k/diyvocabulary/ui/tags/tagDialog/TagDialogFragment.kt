@@ -1,11 +1,11 @@
 package com.na21k.diyvocabulary.ui.tags.tagDialog
 
-import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.na21k.diyvocabulary.R
 import com.na21k.diyvocabulary.databinding.FragmentTagDialogBinding
@@ -40,7 +40,7 @@ class TagDialogFragment : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialogBuilder = AlertDialog.Builder(context)
+        val dialogBuilder = AlertDialog.Builder(requireContext())
         mBinding = FragmentTagDialogBinding.inflate(layoutInflater)
         mBinding.title.requestFocus()
         dialogBuilder.setView(mBinding.root)
