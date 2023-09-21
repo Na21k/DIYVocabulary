@@ -6,6 +6,7 @@ import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.ktx.toObject
 import com.na21k.diyvocabulary.BaseViewModel
 import com.na21k.diyvocabulary.TAGS_COLLECTION_NAME
+import com.na21k.diyvocabulary.TITLE_FIELD_NAME
 import com.na21k.diyvocabulary.USER_ID_FIELD_NAME
 import com.na21k.diyvocabulary.WORDS_COLLECTION_NAME
 import com.na21k.diyvocabulary.model.TagModel
@@ -36,6 +37,7 @@ class WordActivityViewModel(application: Application) : BaseViewModel(applicatio
 
         return mDb.collection(TAGS_COLLECTION_NAME)
             .whereEqualTo(USER_ID_FIELD_NAME, mUser?.uid)
+            .orderBy(TITLE_FIELD_NAME)
             .addSnapshotListener { querySnapshot, exception ->
 
                 if (querySnapshot != null) {
