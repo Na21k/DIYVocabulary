@@ -89,6 +89,7 @@ class MainActivitySharedViewModel(application: Application) : BaseViewModel(appl
 
         return mDb.collection(TAGS_COLLECTION_NAME)
             .whereEqualTo(USER_ID_FIELD_NAME, mUserId)
+            .orderBy(TITLE_FIELD_NAME)
             .addSnapshotListener { querySnapshot, exception ->
                 _isLoadingTags = false
 
