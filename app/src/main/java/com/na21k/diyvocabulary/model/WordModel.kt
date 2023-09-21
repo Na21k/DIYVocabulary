@@ -6,6 +6,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.na21k.diyvocabulary.EXPLANATION_FIELD_NAME
 import com.na21k.diyvocabulary.LAST_MODIFIED_FIELD_NAME
+import com.na21k.diyvocabulary.TAGS_COLLECTION_NAME
 import com.na21k.diyvocabulary.TAGS_FIELD_NAME
 import com.na21k.diyvocabulary.TRANSCRIPTION_FIELD_NAME
 import com.na21k.diyvocabulary.TRANSLATION_FIELD_NAME
@@ -22,6 +23,27 @@ class WordModel : UserOwnedModel() {
     var lastModified: Timestamp? = null
     var tagModels: List<TagModel>? = null
     var tags: List<DocumentReference>? = null
+
+    fun addTag(tagModel: TagModel) {
+        val tagDocumentId = tagModel.id ?: return
+
+        val alreadyAdded = tags?.find { it.id == tagModel.id } != null
+
+        if (alreadyAdded) {
+            return
+        }
+
+        val newTagModels = mutableListOf<TagModel>()
+        val newTags = mutableListOf<DocumentReference>()
+        tagModels?.let { newTagModels.addAll(it) }
+        tags?.let { newTags.addAll(it) }
+
+        newTagModels.add(tagModel)
+        newTags.add(Firebase.firestore.collection(TAGS_COLLECTION_NAME).document(tagDocumentId))
+
+        tagModels = newTagModels
+        tags = newTags
+    }
 
     fun removeTag(tagModel: TagModel) {
         val newTagModels = mutableListOf<TagModel>()

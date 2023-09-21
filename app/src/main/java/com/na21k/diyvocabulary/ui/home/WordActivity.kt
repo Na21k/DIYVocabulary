@@ -15,11 +15,14 @@ import com.na21k.diyvocabulary.databinding.TagChipViewBinding
 import com.na21k.diyvocabulary.helpers.setTextIfEmpty
 import com.na21k.diyvocabulary.model.TagModel
 import com.na21k.diyvocabulary.model.WordModel
+import com.na21k.diyvocabulary.ui.home.pickTagDialog.PickTagDialogFragment
+import com.na21k.diyvocabulary.ui.tags.tagDialog.TagDialogFragment
 import java.text.DateFormat
 
 const val WORD_MODEL_ARG_KEY = "wordModelArgKey"
 
-class WordActivity : BaseActivity() {
+class WordActivity : BaseActivity(), PickTagDialogFragment.OnPickTagDialogFragmentActionListener,
+    TagDialogFragment.OnTagDialogFragmentActionListener {
 
     private lateinit var mBinding: ActivityWordBinding
     private lateinit var mViewModel: WordActivityViewModel
@@ -126,7 +129,8 @@ class WordActivity : BaseActivity() {
             AppCompatResources.getDrawable(this, R.drawable.ic_add_24)
 
         addTagChipBinding.root.setOnClickListener {
-            //TODO: open a dialog or smth
+            val pickTagDialog = PickTagDialogFragment()
+            pickTagDialog.show(supportFragmentManager, null)
         }
 
         mBinding.tags.addView(addTagChipBinding.root)
@@ -151,5 +155,18 @@ class WordActivity : BaseActivity() {
     private fun delete() {
         mViewModel.delete(mWord)
         finish()
+    }
+
+    override fun onPicked(tagModel: TagModel) {
+        mWord.addTag(tagModel)
+        displayTags()
+    }
+
+    override fun onSaveTag(tag: TagModel) {
+        mViewModel.saveTag(tag)
+    }
+
+    override fun onDeleteTag(tag: TagModel) {
+        //no implementation required, the user can't open existing tags from this activity
     }
 }

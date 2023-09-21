@@ -17,4 +17,8 @@ class TagModel : UserOwnedModel() {
 
         return res
     }
+
+    override fun toString(): String {
+        return title.toString()
+    }
 }
