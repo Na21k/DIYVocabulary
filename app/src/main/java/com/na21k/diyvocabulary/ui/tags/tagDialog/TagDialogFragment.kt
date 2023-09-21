@@ -7,7 +7,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProvider
 import com.na21k.diyvocabulary.R
 import com.na21k.diyvocabulary.databinding.FragmentTagDialogBinding
 import com.na21k.diyvocabulary.helpers.setTextIfEmpty
@@ -18,7 +17,6 @@ const val TAG_MODEL_ARG_KEY = "tagModelArgKey"
 class TagDialogFragment : DialogFragment() {
 
     private lateinit var mBinding: FragmentTagDialogBinding
-    private lateinit var mViewModel: TagDialogFragmentViewModel
     private lateinit var mOnDialogActionListener: OnTagDialogFragmentActionListener
     private val tagArg
         get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -39,11 +37,6 @@ class TagDialogFragment : DialogFragment() {
         }
 
         mOnDialogActionListener = context
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        mViewModel = ViewModelProvider(this)[TagDialogFragmentViewModel::class.java]
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
