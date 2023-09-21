@@ -26,6 +26,7 @@ class TagDialogFragment : DialogFragment() {
         } else {
             arguments?.getSerializable(TAG_MODEL_ARG_KEY) as TagModel?
         }
+    private val isExistingDocument get() = tagArg != null
     private var mTag: TagModel = TagModel()
 
     override fun onAttach(context: Context) {
@@ -55,9 +56,12 @@ class TagDialogFragment : DialogFragment() {
                 mOnDialogActionListener.onSaveTag(mTag)
             }
             .setNegativeButton(android.R.string.cancel) { _, _ -> }
-            .setNeutralButton(R.string.delete) { _, _ ->
+
+        if (isExistingDocument) {
+            dialogBuilder.setNeutralButton(R.string.delete) { _, _ ->
                 mOnDialogActionListener.onDeleteTag(mTag)
             }
+        }
 
         val dialog = dialogBuilder.create()
         dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
@@ -68,15 +72,12 @@ class TagDialogFragment : DialogFragment() {
     }
 
     private fun displayIfExistingDocument() {
-        val tag = tagArg
-        val isExistingDocument = tag != null
-
         if (!isExistingDocument) {
             return
         }
 
-        mTag = tag!!
-        setTextIfEmpty(mBinding.title, tag.title)
+        mTag = tagArg!!
+        setTextIfEmpty(mBinding.title, tagArg!!.title)
         mBinding.title.selectAll()
     }
 
