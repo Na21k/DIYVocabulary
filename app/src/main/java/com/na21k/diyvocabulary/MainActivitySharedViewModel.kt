@@ -3,16 +3,32 @@ package com.na21k.diyvocabulary
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.ListenerRegistration
-import com.google.firebase.firestore.ktx.toObject
 import com.na21k.diyvocabulary.model.TagModel
 import com.na21k.diyvocabulary.model.WordModel
+import com.na21k.diyvocabulary.repositories.TagsRepository
+import com.na21k.diyvocabulary.repositories.UsersRepository
+import com.na21k.diyvocabulary.repositories.WordsRepository
 
 class MainActivitySharedViewModel(application: Application) : BaseViewModel(application) {
 
-    private val mUserId: String?
-        get() = mUser?.uid
+    val tags: LiveData<List<TagModel>> get() = mTagsRepository.allModels
+    val wordsWithTags: LiveData<List<WordModel>> get() = _wordsWithTags
+    val isUserSignedIn get() = UsersRepository(getApplication()).isUserSignedIn
+
+    private val mTagsRepository = TagsRepository(application, false)
+    private val mWordsRepository = WordsRepository(application, false)
+
+    private val mWordsRepositoryErrorObserver = Observer<Exception?> { _error.postValue(it) }
+    private val mTagsRepositoryErrorObserver = Observer<Exception?> { _error.postValue(it) }
+
+    private val mIsLoadingWordsObserver = Observer<Boolean> { _isLoadingWords = it }
+    private val mIsLoadingTagsObserver = Observer<Boolean> { _isLoadingTags = it }
+
+    private val mWordsObserver = Observer<List<WordModel>> { mWords = it }
+    private val mReferencesToTagsMapObserver =
+        Observer<Map<DocumentReference, TagModel>> { mReferencesToTagsMap = it }
 
     private var _isLoadingWords = false
         set(value) {
@@ -25,91 +41,71 @@ class MainActivitySharedViewModel(application: Application) : BaseViewModel(appl
             _isLoading.postValue(value || _isLoadingWords)
         }
 
-
-    private var mWordsListenerRegistration: ListenerRegistration? = null
-    private var mTagsListenerRegistration: ListenerRegistration? = null
-
     private var mWords = listOf<WordModel>()
-    private var mTagsMap: MutableMap<DocumentReference, TagModel> = mutableMapOf()
+        set(value) {
+            field = value
+            setTagsForWords()
+        }
+    private var mReferencesToTagsMap: Map<DocumentReference, TagModel> = mutableMapOf()
+        set(value) {
+            field = value
+            setTagsForWords()
+        }
 
-    private val _tags = MutableLiveData<List<TagModel>>(listOf())
     private val _wordsWithTags = MutableLiveData<List<WordModel>>(listOf())
-    val tags: LiveData<List<TagModel>>
-        get() = _tags
-    val wordsWithTags: LiveData<List<WordModel>>
-        get() = _wordsWithTags
-    val isUserSignedIn: Boolean
-        get() = mUser != null
+
+    override fun onCleared() {
+        mWordsRepository.close()
+        mTagsRepository.close()
+        //No need to ensure LiveData isn't observed anymore (stopObservingData() has been called).
+        //Only the ViewModel and Repository (its LiveData) have references to each other,
+        //so the JVM's GC can clear them from memory.
+
+        super.onCleared()
+    }
+
+    override fun consumeError() {
+        mWordsRepository.consumeError()
+        mTagsRepository.consumeError()
+        super.consumeError()
+    }
 
     fun startObservingData() {
-        mWordsListenerRegistration = observeWords()
-        mTagsListenerRegistration = observeTags()
+        observeWords()
+        observeTags()
+        mWordsRepository.resumeObservingData()
+        mTagsRepository.resumeObservingData()
     }
 
     fun stopObservingData() {
-        mWordsListenerRegistration?.remove()
-        mTagsListenerRegistration?.remove()
+        removeObserversWords()
+        removeObserversTags()
+        mWordsRepository.pauseObservingData()
+        mTagsRepository.pauseObservingData()
     }
 
-    private fun observeWords(): ListenerRegistration? {
-        val user = mUser
-
-        if (!ensureSignedIn(user)) {
-            return null
-        }
-
-        _isLoadingWords = true
-
-        return mDb.collection(WORDS_COLLECTION_NAME)
-            .whereEqualTo(USER_ID_FIELD_NAME, mUserId)
-            .orderBy(WORD_FIELD_NAME)
-            .addSnapshotListener { querySnapshot, exception ->
-                _isLoadingWords = false
-
-                if (querySnapshot != null) {
-                    mWords = querySnapshot.documents
-                        .map { snapshot ->
-                            snapshot.toObject<WordModel>()!!.apply { id = snapshot.id }
-                        }
-                    setTagsForWords()
-                } else {
-                    _error.postValue(exception)
-                }
-            }
+    private fun observeWords() {
+        mWordsRepository.error.observeForever(mWordsRepositoryErrorObserver)
+        mWordsRepository.isLoading.observeForever(mIsLoadingWordsObserver)
+        mWordsRepository.allModels.observeForever(mWordsObserver)
     }
 
-    private fun observeTags(): ListenerRegistration? {
-        val user = mUser
+    private fun removeObserversWords() {
+        mWordsRepository.error.removeObserver(mWordsRepositoryErrorObserver)
+        mWordsRepository.isLoading.removeObserver(mIsLoadingWordsObserver)
+        mWordsRepository.allModels.removeObserver(mWordsObserver)
+    }
 
-        if (!ensureSignedIn(user)) {
-            return null
-        }
+    private fun observeTags() {
+        mTagsRepository.error.observeForever(mTagsRepositoryErrorObserver)
+        mTagsRepository.isLoading.observeForever(mIsLoadingTagsObserver)
+        mTagsRepository.referencesToTagsMap.observeForever(mReferencesToTagsMapObserver)
+    }
 
-        _isLoadingTags = true
-
-        return mDb.collection(TAGS_COLLECTION_NAME)
-            .whereEqualTo(USER_ID_FIELD_NAME, mUserId)
-            .orderBy(TITLE_FIELD_NAME)
-            .addSnapshotListener { querySnapshot, exception ->
-                _isLoadingTags = false
-
-                if (querySnapshot != null) {
-                    val tagDocuments = querySnapshot.documents
-
-                    mTagsMap.clear()
-                    mTagsMap.putAll(tagDocuments.map { snapshot ->
-                        snapshot.reference to snapshot.toObject<TagModel>()!!
-                            .apply { id = snapshot.id }
-                    })
-                    _tags.postValue(tagDocuments.map { snapshot ->
-                        snapshot.toObject<TagModel>()!!.apply { id = snapshot.id }
-                    })
-
-                    setTagsForWords()
-                } else {
-                    _error.postValue(exception)
-                }
-            }
+    private fun removeObserversTags() {
+        mTagsRepository.error.removeObserver(mTagsRepositoryErrorObserver)
+        mTagsRepository.isLoading.removeObserver(mIsLoadingTagsObserver)
+        mTagsRepository.referencesToTagsMap.removeObserver(mReferencesToTagsMapObserver)
     }
 
     private fun setTagsForWords() {
@@ -122,7 +118,7 @@ class MainActivitySharedViewModel(application: Application) : BaseViewModel(appl
         mWords.forEach { word ->
             val wordTagModels = mutableListOf<TagModel>()
 
-            mTagsMap.forEach { (tagRef, tagModel) ->
+            mReferencesToTagsMap.forEach { (tagRef, tagModel) ->
                 val wordTagsReferencesContainsThis =
                     word.tags?.find { wordTagRef -> wordTagRef.id == tagRef.id } != null
 
@@ -139,59 +135,14 @@ class MainActivitySharedViewModel(application: Application) : BaseViewModel(appl
     }
 
     fun deleteWord(word: WordModel) {
-        val user = mUser
-
-        if (!ensureSignedIn(user)) {
-            return
-        }
-
-        val documentId = word.id ?: return
-
-        mDb.collection(WORDS_COLLECTION_NAME)
-            .document(documentId)
-            .delete()
-            .addOnFailureListener {
-                _error.postValue(it)
-            }
+        mWordsRepository.delete(word)
     }
 
     fun saveTag(tag: TagModel) {
-        val user = mUser
-
-        if (!ensureSignedIn(user)) {
-            return
-        }
-
-        tag.userId = mUserId
-        val documentId = tag.id
-        val isNewDocument = documentId == null
-
-        if (isNewDocument) {
-            mDb.collection(TAGS_COLLECTION_NAME)
-                .add(tag.toMap())
-                .addOnFailureListener { _error.postValue(it) }
-        } else {
-            mDb.collection(TAGS_COLLECTION_NAME)
-                .document(documentId!!)
-                .set(tag.toMap())
-                .addOnFailureListener { _error.postValue(it) }
-        }
+        mTagsRepository.save(tag)
     }
 
     fun deleteTag(tag: TagModel) {
-        val user = mUser
-
-        if (!ensureSignedIn(user)) {
-            return
-        }
-
-        val documentId = tag.id ?: return
-
-        mDb.collection(TAGS_COLLECTION_NAME)
-            .document(documentId)
-            .delete()
-            .addOnFailureListener {
-                _error.postValue(it)
-            }
+        mTagsRepository.delete(tag)
     }
 }
