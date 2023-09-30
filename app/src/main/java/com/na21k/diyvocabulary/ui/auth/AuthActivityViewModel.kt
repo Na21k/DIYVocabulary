@@ -2,8 +2,8 @@ package com.na21k.diyvocabulary.ui.auth
 
 import android.app.Application
 import androidx.lifecycle.LiveData
-import com.na21k.diyvocabulary.BaseViewModel
 import com.na21k.diyvocabulary.repositories.UsersRepository
+import com.na21k.diyvocabulary.ui.shared.BaseViewModel
 
 class AuthActivityViewModel(application: Application) : BaseViewModel(application) {
 

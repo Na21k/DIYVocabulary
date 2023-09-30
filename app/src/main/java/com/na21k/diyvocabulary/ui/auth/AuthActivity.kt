@@ -17,9 +17,9 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
-import com.na21k.diyvocabulary.BaseActivity
 import com.na21k.diyvocabulary.R
 import com.na21k.diyvocabulary.databinding.ActivityAuthBinding
+import com.na21k.diyvocabulary.ui.shared.BaseActivity
 
 class AuthActivity : BaseActivity() {
 

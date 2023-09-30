@@ -1,4 +1,4 @@
-package com.na21k.diyvocabulary.ui.home
+package com.na21k.diyvocabulary.ui.home.word
 
 import android.os.Build
 import android.os.Bundle
@@ -8,14 +8,14 @@ import android.view.View
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.chip.Chip
-import com.na21k.diyvocabulary.BaseActivity
 import com.na21k.diyvocabulary.R
 import com.na21k.diyvocabulary.databinding.ActivityWordBinding
 import com.na21k.diyvocabulary.databinding.TagChipViewBinding
 import com.na21k.diyvocabulary.helpers.setTextIfEmpty
 import com.na21k.diyvocabulary.model.TagModel
 import com.na21k.diyvocabulary.model.WordModel
-import com.na21k.diyvocabulary.ui.home.pickTagDialog.PickTagDialogFragment
+import com.na21k.diyvocabulary.ui.home.word.pickTagDialog.PickTagDialogFragment
+import com.na21k.diyvocabulary.ui.shared.BaseActivity
 import com.na21k.diyvocabulary.ui.tags.tagDialog.TagDialogFragment
 import java.text.DateFormat
 

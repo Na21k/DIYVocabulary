@@ -1,11 +1,11 @@
-package com.na21k.diyvocabulary.ui.home
+package com.na21k.diyvocabulary.ui.home.word
 
 import android.app.Application
-import com.na21k.diyvocabulary.BaseViewModel
 import com.na21k.diyvocabulary.model.TagModel
 import com.na21k.diyvocabulary.model.WordModel
 import com.na21k.diyvocabulary.repositories.TagsRepository
 import com.na21k.diyvocabulary.repositories.WordsRepository
+import com.na21k.diyvocabulary.ui.shared.BaseViewModel
 
 class WordActivityViewModel(application: Application) : BaseViewModel(application) {
 

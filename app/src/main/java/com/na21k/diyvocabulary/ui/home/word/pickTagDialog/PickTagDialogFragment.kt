@@ -1,4 +1,4 @@
-package com.na21k.diyvocabulary.ui.home.pickTagDialog
+package com.na21k.diyvocabulary.ui.home.word.pickTagDialog
 
 import android.app.Dialog
 import android.content.Context
@@ -9,7 +9,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.na21k.diyvocabulary.R
 import com.na21k.diyvocabulary.model.TagModel
-import com.na21k.diyvocabulary.ui.home.WordActivityViewModel
+import com.na21k.diyvocabulary.ui.home.word.WordActivityViewModel
 import com.na21k.diyvocabulary.ui.tags.tagDialog.TagDialogFragment
 
 class PickTagDialogFragment : DialogFragment() {

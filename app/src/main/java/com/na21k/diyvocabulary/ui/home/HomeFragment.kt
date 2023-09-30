@@ -8,10 +8,12 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import com.na21k.diyvocabulary.BaseFragment
-import com.na21k.diyvocabulary.MainActivitySharedViewModel
 import com.na21k.diyvocabulary.databinding.FragmentHomeBinding
 import com.na21k.diyvocabulary.model.WordModel
+import com.na21k.diyvocabulary.ui.MainActivitySharedViewModel
+import com.na21k.diyvocabulary.ui.home.word.WORD_MODEL_ARG_KEY
+import com.na21k.diyvocabulary.ui.home.word.WordActivity
+import com.na21k.diyvocabulary.ui.shared.BaseFragment
 
 class HomeFragment : BaseFragment(), WordsListAdapter.OnWordActionListener {
 

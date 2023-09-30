@@ -14,3 +14,5 @@ const val LAST_MODIFIED_FIELD_NAME = "lastModified"
 const val TAGS_FIELD_NAME = "tags"
 
 const val TITLE_FIELD_NAME = "title"
+
+const val WORD_IMAGES_STORAGE_FOLDER_PATH = "images/words"

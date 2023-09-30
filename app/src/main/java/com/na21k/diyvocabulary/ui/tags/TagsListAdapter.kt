@@ -4,10 +4,10 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.na21k.diyvocabulary.BaseViewHolder
 import com.na21k.diyvocabulary.R
 import com.na21k.diyvocabulary.databinding.TagsListItemViewBinding
 import com.na21k.diyvocabulary.model.TagModel
+import com.na21k.diyvocabulary.ui.shared.viewHolders.BaseViewHolder
 
 class TagsListAdapter(private val onTagActionListener: OnTagActionListener) :
     RecyclerView.Adapter<TagsListAdapter.TagViewHolder>() {

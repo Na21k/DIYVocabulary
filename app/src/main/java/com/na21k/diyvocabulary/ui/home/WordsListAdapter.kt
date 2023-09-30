@@ -5,12 +5,12 @@ import android.view.MenuItem
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.na21k.diyvocabulary.BaseViewHolder
 import com.na21k.diyvocabulary.R
 import com.na21k.diyvocabulary.databinding.TagChipViewBinding
 import com.na21k.diyvocabulary.databinding.WordsListItemViewBinding
 import com.na21k.diyvocabulary.model.TagModel
 import com.na21k.diyvocabulary.model.WordModel
+import com.na21k.diyvocabulary.ui.shared.viewHolders.BaseViewHolder
 
 class WordsListAdapter(private val mOnWordActionListener: OnWordActionListener) :
     RecyclerView.Adapter<WordsListAdapter.WordViewHolder>() {

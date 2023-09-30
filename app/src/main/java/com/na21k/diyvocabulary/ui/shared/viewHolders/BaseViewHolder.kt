@@ -1,4 +1,4 @@
-package com.na21k.diyvocabulary
+package com.na21k.diyvocabulary.ui.shared.viewHolders
 
 import android.view.ContextMenu
 import android.view.MenuInflater

@@ -1,4 +1,4 @@
-package com.na21k.diyvocabulary
+package com.na21k.diyvocabulary.ui
 
 import android.app.Application
 import androidx.lifecycle.LiveData
@@ -10,6 +10,7 @@ import com.na21k.diyvocabulary.model.WordModel
 import com.na21k.diyvocabulary.repositories.TagsRepository
 import com.na21k.diyvocabulary.repositories.UsersRepository
 import com.na21k.diyvocabulary.repositories.WordsRepository
+import com.na21k.diyvocabulary.ui.shared.BaseViewModel
 
 class MainActivitySharedViewModel(application: Application) : BaseViewModel(application) {
 

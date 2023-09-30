@@ -1,4 +1,4 @@
-package com.na21k.diyvocabulary
+package com.na21k.diyvocabulary.ui.shared
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

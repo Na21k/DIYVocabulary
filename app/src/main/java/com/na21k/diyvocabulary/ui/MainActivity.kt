@@ -1,4 +1,4 @@
-package com.na21k.diyvocabulary
+package com.na21k.diyvocabulary.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,10 +10,12 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.na21k.diyvocabulary.R
 import com.na21k.diyvocabulary.databinding.ActivityMainBinding
 import com.na21k.diyvocabulary.helpers.requestAuth
 import com.na21k.diyvocabulary.model.TagModel
 import com.na21k.diyvocabulary.ui.auth.ProfileActivity
+import com.na21k.diyvocabulary.ui.shared.BaseActivity
 import com.na21k.diyvocabulary.ui.tags.tagDialog.TagDialogFragment
 
 class MainActivity : BaseActivity(), TagDialogFragment.OnTagDialogFragmentActionListener {

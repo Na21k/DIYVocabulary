@@ -1,4 +1,4 @@
-package com.na21k.diyvocabulary
+package com.na21k.diyvocabulary.ui.shared
 
 import android.graphics.Color
 import android.view.View
@@ -8,6 +8,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import com.na21k.diyvocabulary.R
 
 open class BaseActivity : AppCompatActivity() {
 

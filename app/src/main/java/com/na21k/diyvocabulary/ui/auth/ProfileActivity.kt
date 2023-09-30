@@ -8,7 +8,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
 import com.google.firebase.internal.api.FirebaseNoSignedInUserException
-import com.na21k.diyvocabulary.BaseActivity
 import com.na21k.diyvocabulary.R
 import com.na21k.diyvocabulary.databinding.ActivityProfileBinding
 import com.na21k.diyvocabulary.databinding.NewEmailAlertViewBinding
@@ -16,6 +15,7 @@ import com.na21k.diyvocabulary.databinding.NewPasswordAlertViewBinding
 import com.na21k.diyvocabulary.databinding.ReauthenticationAlertViewBinding
 import com.na21k.diyvocabulary.helpers.requestAuth
 import com.na21k.diyvocabulary.helpers.showErrorAlertDialog
+import com.na21k.diyvocabulary.ui.shared.BaseActivity
 
 class ProfileActivity : BaseActivity() {
 

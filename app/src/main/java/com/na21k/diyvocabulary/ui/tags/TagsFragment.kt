@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import com.na21k.diyvocabulary.BaseFragment
-import com.na21k.diyvocabulary.MainActivitySharedViewModel
 import com.na21k.diyvocabulary.databinding.FragmentTagsBinding
 import com.na21k.diyvocabulary.model.TagModel
+import com.na21k.diyvocabulary.ui.MainActivitySharedViewModel
+import com.na21k.diyvocabulary.ui.shared.BaseFragment
 import com.na21k.diyvocabulary.ui.tags.tagDialog.TAG_MODEL_ARG_KEY
 import com.na21k.diyvocabulary.ui.tags.tagDialog.TagDialogFragment
 
