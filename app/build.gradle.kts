@@ -61,4 +61,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("com.google.firebase:firebase-storage-ktx")
+
+    implementation("com.firebaseui:firebase-ui-storage:7.2.0")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 }
