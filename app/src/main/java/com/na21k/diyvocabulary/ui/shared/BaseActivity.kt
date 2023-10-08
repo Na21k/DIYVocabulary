@@ -15,7 +15,7 @@ open class BaseActivity : AppCompatActivity() {
     protected fun enableUpNavigation(appBar: Toolbar) {
         appBar.setNavigationIcon(R.drawable.ic_arrow_back_24)
         appBar.setNavigationContentDescription(R.string.navigate_up_content_description)
-        appBar.setNavigationOnClickListener { finish() }
+        appBar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
     }
 
     protected open fun takeCareOfWindowInsets(rootView: View, countImeInset: Boolean = false) {

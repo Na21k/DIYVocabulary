@@ -12,7 +12,7 @@ import com.na21k.diyvocabulary.USER_ID_FIELD_NAME
 import com.na21k.diyvocabulary.model.TagModel
 
 class TagsRepository(application: Application, observeImmediately: Boolean = true) :
-    ExposesModelsAsListRepository<TagModel>(application, observeImmediately) {
+    ExposesModelsAsListRepository<TagModel, String>(application, observeImmediately) {
 
     val referencesToTagsMap: LiveData<Map<DocumentReference, TagModel>>
         get() = _referencesToTagsMap
@@ -56,26 +56,30 @@ class TagsRepository(application: Application, observeImmediately: Boolean = tru
             }
     }
 
-    override fun save(model: TagModel) {
+    override fun save(model: TagModel): String? {
         val user = mUser
 
         if (!ensureSignedIn(user)) {
-            return
+            return null
         }
 
         model.userId = user!!.uid
         val documentId = model.id
         val isNewDocument = documentId == null
 
-        if (isNewDocument) {
-            mDb.collection(TAGS_COLLECTION_NAME)
-                .add(model.toMap())
+        return if (isNewDocument) {
+            val newDoc = mDb.collection(TAGS_COLLECTION_NAME).document()
+            newDoc.set(model.toMap())
                 .addOnFailureListener { _error.postValue(it) }
+
+            newDoc.id
         } else {
             mDb.collection(TAGS_COLLECTION_NAME)
                 .document(documentId!!)
                 .set(model.toMap())
                 .addOnFailureListener { _error.postValue(it) }
+
+            documentId
         }
     }
 

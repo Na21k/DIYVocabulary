@@ -70,4 +70,10 @@
     <string name="password_updated_successfully">Password updated successfully</string>
     <string name="email_updated_successfully">Email updated successfully</string>
     <string name="add_tag_chip">Add tag</string>
+    <string name="attach_image_content_description">Add image</string>
+    <string name="attached_image_content_description">Attached image</string>
+    <string name="importing_image_toast">Importing the image…</string>
+    <string name="loading_images_snack">Loading images, please wait…</string>
+    <string name="cant_attach_more_images_formatted_snack">Can\'t attach more than %1$d images</string>
+    <string name="uploading_images_please_wait_snack">Uploading images, please wait…</string>
 </resources>

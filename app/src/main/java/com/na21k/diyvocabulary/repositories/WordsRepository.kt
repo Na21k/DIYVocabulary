@@ -11,7 +11,7 @@ import com.na21k.diyvocabulary.model.WordModel
 import java.util.Date
 
 class WordsRepository(application: Application, observeImmediately: Boolean = true) :
-    ExposesModelsAsListRepository<WordModel>(application, observeImmediately) {
+    ExposesModelsAsListRepository<WordModel, String>(application, observeImmediately) {
 
     override fun observeAll(): ListenerRegistration? {
         val user = mUser
@@ -41,11 +41,11 @@ class WordsRepository(application: Application, observeImmediately: Boolean = tr
             }
     }
 
-    override fun save(model: WordModel) {
+    override fun save(model: WordModel): String? {
         val user = mUser
 
         if (!ensureSignedIn(user)) {
-            return
+            return null
         }
 
         model.userId = mUser?.uid
@@ -53,13 +53,17 @@ class WordsRepository(application: Application, observeImmediately: Boolean = tr
         val documentId = model.id
         val isNewDocument = documentId == null
 
-        if (isNewDocument) {
-            mDb.collection(WORDS_COLLECTION_NAME)
-                .add(model.toMap())
+        return if (isNewDocument) {
+            val newDoc = mDb.collection(WORDS_COLLECTION_NAME).document()
+            newDoc.set(model.toMap())
+
+            newDoc.id
         } else {
             mDb.collection(WORDS_COLLECTION_NAME)
                 .document(documentId!!)
                 .set(model.toMap())
+
+            documentId
         }
     }
 

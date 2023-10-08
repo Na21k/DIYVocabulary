@@ -16,3 +16,6 @@ const val TAGS_FIELD_NAME = "tags"
 const val TITLE_FIELD_NAME = "title"
 
 const val WORD_IMAGES_STORAGE_FOLDER_PATH = "images/words"
+
+const val WORD_ATTACHED_IMAGES_COUNT_MAX = 5
+const val OPEN_IMAGE_TMP_FILE_NAME = "openImageTmpFile"
