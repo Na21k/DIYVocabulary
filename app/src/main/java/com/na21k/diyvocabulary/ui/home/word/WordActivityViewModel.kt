@@ -30,6 +30,9 @@ class WordActivityViewModel(application: Application) : BaseViewModel(applicatio
             val scheduledForSaving = mAttachedImagesScheduledForSaving.size
             return attached - scheduledForDeletion + scheduledForSaving
         }
+    val attachedImagesAltered
+        get() = mAttachedImagesScheduledForSaving.isNotEmpty() ||
+                mAttachedImagesScheduledForDeletion.isNotEmpty()
     override val isLoading: LiveData<Boolean> get() = mImagesRepository.isLoading
     val imagesUploadTask: LiveData<Task<Void>?> get() = _imagesUploadTask
 

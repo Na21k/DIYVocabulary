@@ -48,6 +48,8 @@ import java.text.DateFormat
 import java.util.Date
 
 const val WORD_MODEL_ARG_KEY = "wordModelArgKey"
+const val WORD_TAGS_STATE_KEY = "wordTagsStateKey"
+const val WORD_ATTACHED_IMAGES_STATE_KEY = "wordAttachedImagesStateKey"
 
 class WordActivity : BaseActivity(), PickTagDialogFragment.OnPickTagDialogFragmentActionListener,
     TagDialogFragment.OnTagDialogFragmentActionListener {
@@ -96,6 +98,7 @@ class WordActivity : BaseActivity(), PickTagDialogFragment.OnPickTagDialogFragme
         }
     private val isExistingDocument get() = wordExtra != null
     private var mWord = WordModel()
+    private var restoredSavedState = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -146,6 +149,46 @@ class WordActivity : BaseActivity(), PickTagDialogFragment.OnPickTagDialogFragme
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putSerializable(WORD_TAGS_STATE_KEY, mWord.tagModels?.toTypedArray())
+        outState.putSerializable(
+            WORD_ATTACHED_IMAGES_STATE_KEY,
+            mImagesListAdapter.getItems().toTypedArray()
+        )
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+
+        val tags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            savedInstanceState.getSerializable(WORD_TAGS_STATE_KEY, Array<TagModel>::class.java)
+        } else {
+            savedInstanceState.getSerializable(WORD_TAGS_STATE_KEY) as Array<TagModel>?
+        }
+
+        mWord.clearTags()
+        tags?.forEach { mWord.addTag(it) }
+
+        displayTags()
+
+        val images = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            savedInstanceState.getSerializable(
+                WORD_ATTACHED_IMAGES_STATE_KEY,
+                Array<AttachedImageModel>::class.java
+            )
+        } else {
+            savedInstanceState
+                .getSerializable(WORD_ATTACHED_IMAGES_STATE_KEY) as Array<AttachedImageModel>?
+        }
+
+        if (images != null) {
+            mImagesListAdapter.setItems(images.toList())
+        }
+
+        restoredSavedState = true
+    }
+
     private fun displayIfExistingDocument() {
         if (!isExistingDocument) {
             return
@@ -165,8 +208,10 @@ class WordActivity : BaseActivity(), PickTagDialogFragment.OnPickTagDialogFragme
         )
 
         mBinding.lastModified.visibility = View.VISIBLE
+        val wordId = word.id
 
-        word.id?.let { mViewModel.loadAttachedImages(it) }
+        if (wordId != null && !mViewModel.attachedImagesAltered && !restoredSavedState)
+            mViewModel.loadAttachedImages(wordId)
     }
 
     private fun setUpImagesList(): AttachedImagesListAdapter {

@@ -70,6 +70,8 @@ class AttachedImagesListAdapter(
         notifyDataSetChanged()
     }
 
+    fun getItems(): List<AttachedImageModel> = mNormalItemsOnly.map { it.model }
+
     fun addItem(item: AttachedImageModel) {
         val newItems = mutableListOf<ListWithFooterItem>()
         newItems.addAll(mNormalItemsOnly)

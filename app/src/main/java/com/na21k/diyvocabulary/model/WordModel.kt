@@ -21,8 +21,8 @@ class WordModel : UserOwnedModel() {
     var explanation: String? = null
     var usageExample: String? = null
     var lastModified: Timestamp? = null
-    var tagModels: List<TagModel>? = null
-    var tags: List<DocumentReference>? = null
+    var tagModels: List<TagModel>? = null   //TODO: make private set
+    var tags: List<DocumentReference>? = null   //TODO: make private set
 
     fun addTag(tagModel: TagModel) {
         val tagDocumentId = tagModel.id ?: return
@@ -56,6 +56,11 @@ class WordModel : UserOwnedModel() {
 
         tagModels = newTagModels
         tags = newTags
+    }
+
+    fun clearTags() {
+        tagModels = listOf()
+        tags = listOf()
     }
 
     override fun toMap(): Map<String, Any?> {

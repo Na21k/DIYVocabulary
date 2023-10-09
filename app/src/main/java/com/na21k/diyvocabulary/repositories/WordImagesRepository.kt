@@ -86,7 +86,9 @@ class WordImagesRepository(application: Application) :
      * @see AttachedImageModel
      */
     override fun save(model: AttachedImageModel): Task<Unit> {
-        if (model.deviceFileUri == null) {
+        val deviceFileUri = model.deviceFileUri
+
+        if (deviceFileUri == null) {
             val ex = IllegalArgumentException("The model has no Uri string set")
             _error.postValue(ex)
             return Tasks.forException(ex)
@@ -94,7 +96,7 @@ class WordImagesRepository(application: Application) :
 
         val resTaskSource = TaskCompletionSource<Unit>()
 
-        getBitmapFromUriStr(model.deviceFileUri, onLoaded = fun(bitmap) {
+        getBitmapFromUriStr(deviceFileUri, onLoaded = fun(bitmap) {
             val scaledCompressedImageInputStream = bitmap
                 .ensureScaledAndCompressed(targetMaxDimen = 1920, compressionQuality = 30)
 
