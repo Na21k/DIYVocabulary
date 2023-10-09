@@ -21,8 +21,10 @@ class WordModel : UserOwnedModel() {
     var explanation: String? = null
     var usageExample: String? = null
     var lastModified: Timestamp? = null
-    var tagModels: List<TagModel>? = null   //TODO: make private set
-    var tags: List<DocumentReference>? = null   //TODO: make private set
+    var tagModels: List<TagModel>? = null
+        private set
+    var tags: List<DocumentReference>? = null
+        private set
 
     fun addTag(tagModel: TagModel) {
         val tagDocumentId = tagModel.id ?: return
@@ -61,6 +63,31 @@ class WordModel : UserOwnedModel() {
     fun clearTags() {
         tagModels = listOf()
         tags = listOf()
+    }
+
+    /***
+     * Checks every DocumentReference from the passed Map for presence in the WordModel
+     * and if a DocumentReference is present, adds the respective TagModel from docRefsToModels
+     * to this WordModel. The existing tagModels List is replaced and not appended to.
+     * @param docRefsToModels a Map containing document references to look through
+     * and the respective models.
+     * @see tags
+     * @see tagModels
+     */
+    fun setTagModels(docRefsToModels: Map<DocumentReference, TagModel>) {
+        val tags = tags ?: return
+
+        val newTagModels = mutableListOf<TagModel>()
+
+        docRefsToModels.forEach { (tagRef, tagModel) ->
+            val tagReferencesContainsThis = tags.any { it.id == tagRef.id }
+
+            if (tagReferencesContainsThis) {
+                newTagModels.add(tagModel)
+            }
+        }
+
+        tagModels = newTagModels
     }
 
     override fun toMap(): Map<String, Any?> {

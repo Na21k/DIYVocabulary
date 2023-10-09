@@ -117,18 +117,7 @@ class MainActivitySharedViewModel(application: Application) : BaseViewModel(appl
         val wordsWithTags = mutableListOf<WordModel>()
 
         mWords.forEach { word ->
-            val wordTagModels = mutableListOf<TagModel>()
-
-            mReferencesToTagsMap.forEach { (tagRef, tagModel) ->
-                val wordTagsReferencesContainsThis =
-                    word.tags?.find { wordTagRef -> wordTagRef.id == tagRef.id } != null
-
-                if (wordTagsReferencesContainsThis) {
-                    wordTagModels.add(tagModel)
-                }
-            }
-
-            word.tagModels = wordTagModels
+            word.setTagModels(mReferencesToTagsMap)
             wordsWithTags.add(word)
         }
 
