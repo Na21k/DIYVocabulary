@@ -15,7 +15,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.FileProvider
 import androidx.core.view.children
-import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -231,12 +230,13 @@ class WordActivity : BaseActivity(), PickTagDialogFragment.OnPickTagDialogFragme
             }
         }
         mViewModel.isLoading.observe(this) {
-            mBinding.attachedImagesProgressBar.isVisible = it
+            switchLoadingMode(it, mBinding.attachedImagesProgressBar)
         }
         mViewModel.attachedImages.observe(this) {
             mImagesListAdapter.setItems(it)
         }
         mViewModel.imagesUploadTask.observe(this) {
+            switchLoadingMode(it != null, mBinding.attachedImagesProgressBar)
             it?.addOnCompleteListener { finish() }
         }
     }
@@ -294,7 +294,6 @@ class WordActivity : BaseActivity(), PickTagDialogFragment.OnPickTagDialogFragme
         mWord.usageExample = mBinding.usageExample.text.toString()
 
         mViewModel.save(mWord)
-        switchLoadingMode(true, mBinding.attachedImagesProgressBar)
         scrollToTop()
     }
 
