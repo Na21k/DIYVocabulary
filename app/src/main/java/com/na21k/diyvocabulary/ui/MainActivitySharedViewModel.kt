@@ -9,6 +9,7 @@ import com.na21k.diyvocabulary.model.TagModel
 import com.na21k.diyvocabulary.model.WordModel
 import com.na21k.diyvocabulary.repositories.TagsRepository
 import com.na21k.diyvocabulary.repositories.UsersRepository
+import com.na21k.diyvocabulary.repositories.WordImagesRepository
 import com.na21k.diyvocabulary.repositories.WordsRepository
 import com.na21k.diyvocabulary.ui.shared.BaseViewModel
 
@@ -20,9 +21,11 @@ class MainActivitySharedViewModel(application: Application) : BaseViewModel(appl
 
     private val mTagsRepository = TagsRepository(application, false)
     private val mWordsRepository = WordsRepository(application, false)
+    private val mImagesRepository = WordImagesRepository(application)
 
     private val mWordsRepositoryErrorObserver = Observer<Exception?> { _error.postValue(it) }
     private val mTagsRepositoryErrorObserver = Observer<Exception?> { _error.postValue(it) }
+    private val mImagesRepositoryErrorObserver = Observer<Exception?> { _error.postValue(it) }
 
     private val mIsLoadingWordsObserver = Observer<Boolean> { _isLoadingWords = it }
     private val mIsLoadingTagsObserver = Observer<Boolean> { _isLoadingTags = it }
@@ -58,6 +61,7 @@ class MainActivitySharedViewModel(application: Application) : BaseViewModel(appl
     override fun onCleared() {
         mWordsRepository.close()
         mTagsRepository.close()
+        mImagesRepository.close()
         //No need to ensure LiveData isn't observed anymore (stopObservingData() has been called).
         //Only the ViewModel and Repository (its LiveData) have references to each other,
         //so the JVM's GC can clear them from memory.
@@ -68,45 +72,56 @@ class MainActivitySharedViewModel(application: Application) : BaseViewModel(appl
     override fun consumeError() {
         mWordsRepository.consumeError()
         mTagsRepository.consumeError()
+        mImagesRepository.consumeError()
         super.consumeError()
     }
 
     fun startObservingData() {
-        observeWords()
-        observeTags()
+        observeWordsRepo()
+        observeTagsRepo()
+        observeImagesRepo()
         mWordsRepository.resumeObservingData()
         mTagsRepository.resumeObservingData()
     }
 
     fun stopObservingData() {
-        removeObserversWords()
-        removeObserversTags()
+        removeObserversWordsRepo()
+        removeObserversTagsRepo()
+        removeObserversImagesRepo()
         mWordsRepository.pauseObservingData()
         mTagsRepository.pauseObservingData()
     }
 
-    private fun observeWords() {
+    private fun observeWordsRepo() {
         mWordsRepository.error.observeForever(mWordsRepositoryErrorObserver)
         mWordsRepository.isLoading.observeForever(mIsLoadingWordsObserver)
         mWordsRepository.allModels.observeForever(mWordsObserver)
     }
 
-    private fun removeObserversWords() {
+    private fun removeObserversWordsRepo() {
         mWordsRepository.error.removeObserver(mWordsRepositoryErrorObserver)
         mWordsRepository.isLoading.removeObserver(mIsLoadingWordsObserver)
         mWordsRepository.allModels.removeObserver(mWordsObserver)
     }
 
-    private fun observeTags() {
+    private fun observeTagsRepo() {
         mTagsRepository.error.observeForever(mTagsRepositoryErrorObserver)
         mTagsRepository.isLoading.observeForever(mIsLoadingTagsObserver)
         mTagsRepository.referencesToTagsMap.observeForever(mReferencesToTagsMapObserver)
     }
 
-    private fun removeObserversTags() {
+    private fun removeObserversTagsRepo() {
         mTagsRepository.error.removeObserver(mTagsRepositoryErrorObserver)
         mTagsRepository.isLoading.removeObserver(mIsLoadingTagsObserver)
         mTagsRepository.referencesToTagsMap.removeObserver(mReferencesToTagsMapObserver)
+    }
+
+    private fun observeImagesRepo() {
+        mImagesRepository.error.observeForever(mImagesRepositoryErrorObserver)
+    }
+
+    private fun removeObserversImagesRepo() {
+        mImagesRepository.error.removeObserver(mImagesRepositoryErrorObserver)
     }
 
     private fun setTagsForWords() {
@@ -126,6 +141,7 @@ class MainActivitySharedViewModel(application: Application) : BaseViewModel(appl
 
     fun deleteWord(word: WordModel) {
         mWordsRepository.delete(word)
+        word.id?.let { mImagesRepository.delete(it) }
     }
 
     fun saveTag(tag: TagModel) {

@@ -23,8 +23,11 @@ import java.io.InputStream
 import kotlin.math.roundToInt
 
 /***
- * A valid wordId must be set to load, save, and delete images.
- * @property wordId must be set to load, save, and delete images.
+ * A valid wordId must be set to load, save, and delete image models.
+ * Call resumeObservingData() to load models after you've set a wordId.
+ * But you can delete by wordId even when the wordId property is not set.
+ * @property wordId must be set to load, save, and delete image models.
+ * But it mustn't to delete by wordId.
  */
 class WordImagesRepository(application: Application) :
     ExposesModelsAsListRepository<AttachedImageModel, Task<Unit>>(application, false) {
@@ -136,6 +139,11 @@ class WordImagesRepository(application: Application) :
         return Tasks.whenAll(uploadTasks)
     }
 
+    /***
+     * You must set wordId before calling this.
+     * Use delete(wordId: String) to delete without setting the wordId property.
+     * @see wordId
+     */
     override fun delete(model: AttachedImageModel) {
         if (model.downloadLinkUri == null) {
             return  //this model has never been saved
@@ -145,6 +153,33 @@ class WordImagesRepository(application: Application) :
             ?.delete()
             ?.addOnFailureListener {
                 _error.postValue(it)
+            }
+    }
+
+    /***
+     * Allows for deletion without setting the wordId property.
+     * This does not save the supplied wordId.
+     */
+    fun delete(wordId: String) {
+        val user = mUser
+
+        if (!ensureSignedIn(user)) {
+            return
+        }
+
+        Firebase.storage.getReference(WORD_IMAGES_STORAGE_FOLDER_PATH).child(user!!.uid)
+            .child(wordId).listAll()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    task.result.items.forEach { word ->
+                        word.delete()
+                            .addOnFailureListener {
+                                _error.postValue(it)
+                            }
+                    }
+                } else {
+                    _error.postValue(task.exception)
+                }
             }
     }
 
