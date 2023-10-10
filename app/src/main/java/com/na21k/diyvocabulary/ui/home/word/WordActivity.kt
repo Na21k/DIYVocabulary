@@ -283,6 +283,7 @@ class WordActivity : BaseActivity(), PickTagDialogFragment.OnPickTagDialogFragme
     private fun save() {
         if (mBinding.word.text.isNullOrBlank()) {
             mBinding.wordLayout.error = getString(R.string.validation_required)
+            scrollToTop()
             return
         }
 
