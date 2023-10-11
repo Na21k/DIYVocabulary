@@ -1,6 +1,5 @@
 package com.na21k.diyvocabulary.ui.home
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.ViewGroup
@@ -17,8 +16,6 @@ class WordsListAdapter(private val mOnWordActionListener: OnWordActionListener) 
     RecyclerView.Adapter<WordsListAdapter.WordViewHolder>() {
 
     private var mItems: List<WordModel> = listOf()
-    private var mSearchItems: List<WordModel> = listOf()
-    private var mIsSearchMode = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -27,38 +24,15 @@ class WordsListAdapter(private val mOnWordActionListener: OnWordActionListener) 
         return WordViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = if (mIsSearchMode) mSearchItems.size else mItems.size
+    override fun getItemCount(): Int = mItems.size
 
     override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
-        val items = if (mIsSearchMode) mSearchItems else mItems
-        val item = items[position]
+        val item = mItems[position]
         holder.setData(item)
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     fun setItems(items: List<WordModel>) {
         mItems = items
-        notifyDataSetChanged()
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun search(query: String) {
-        mSearchItems = mItems.filter {
-            it.word?.contains(query, ignoreCase = true) ?: false ||
-                    it.transcription?.contains(query, ignoreCase = true) ?: false ||
-                    it.translation?.contains(query, ignoreCase = true) ?: false ||
-                    it.explanation?.contains(query, ignoreCase = true) ?: false ||
-                    it.usageExample?.contains(query, ignoreCase = true) ?: false
-        }
-
-        mIsSearchMode = true
-        notifyDataSetChanged()
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun clearSearch() {
-        mSearchItems = listOf()
-        mIsSearchMode = false
         notifyDataSetChanged()
     }
 

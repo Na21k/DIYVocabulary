@@ -3,19 +3,11 @@ package com.na21k.diyvocabulary.ui.home
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.SearchView
-import androidx.appcompat.widget.SearchView.OnQueryTextListener
-import androidx.core.view.MenuProvider
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import com.na21k.diyvocabulary.R
 import com.na21k.diyvocabulary.databinding.FragmentHomeBinding
 import com.na21k.diyvocabulary.model.WordModel
 import com.na21k.diyvocabulary.ui.MainActivitySharedViewModel
@@ -23,7 +15,7 @@ import com.na21k.diyvocabulary.ui.home.word.WORD_MODEL_ARG_KEY
 import com.na21k.diyvocabulary.ui.home.word.WordActivity
 import com.na21k.diyvocabulary.ui.shared.BaseFragment
 
-class HomeFragment : BaseFragment(), WordsListAdapter.OnWordActionListener, MenuProvider {
+class HomeFragment : BaseFragment(), WordsListAdapter.OnWordActionListener {
 
     private lateinit var mBinding: FragmentHomeBinding
     private lateinit var mViewModel: MainActivitySharedViewModel
@@ -40,10 +32,6 @@ class HomeFragment : BaseFragment(), WordsListAdapter.OnWordActionListener, Menu
         savedInstanceState: Bundle?
     ): View {
         mBinding = FragmentHomeBinding.inflate(inflater, container, false)
-
-        val menuHost = requireActivity()
-        menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.STARTED)
-
         return mBinding.root
     }
 
@@ -53,23 +41,6 @@ class HomeFragment : BaseFragment(), WordsListAdapter.OnWordActionListener, Menu
         setListeners()
         observeLiveData()
     }
-
-    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.home_fragment_options_menu, menu)
-        val searchItemActionView = menu.findItem(R.id.menu_search).actionView as SearchView
-        searchItemActionView.setOnQueryTextListener(object : OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean = false
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                if (!newText.isNullOrEmpty()) mListAdapter.search(newText)
-                else mListAdapter.clearSearch()
-
-                return false
-            }
-        })
-    }
-
-    override fun onMenuItemSelected(menuItem: MenuItem): Boolean = false
 
     private fun setUpRecyclerView(): WordsListAdapter {
         val rv = mBinding.wordsListRecyclerView

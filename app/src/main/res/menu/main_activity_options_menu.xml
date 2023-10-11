@@ -5,8 +5,7 @@
     <item
         android:id="@+id/menu_profile"
         android:icon="@drawable/ic_account_24"
-        android:orderInCategory="1"
         android:title="@string/profile_options_menu_item"
-        app:showAsAction="ifRoom|withText" />
+        app:showAsAction="ifRoom" />
 
 </menu>
