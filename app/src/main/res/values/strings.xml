@@ -60,6 +60,7 @@
     <string name="create_tag_alert_button">Create</string>
 
     <!--Options menu items-->
+    <string name="search_options_menu_item">Search</string>
     <string name="profile_options_menu_item">Profile</string>
     <string name="save_options_menu_item">Save</string>
     <string name="delete_options_menu_item">Delete</string>
