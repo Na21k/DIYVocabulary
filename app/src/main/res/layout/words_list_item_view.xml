@@ -61,16 +61,6 @@
             android:textSize="16sp"
             tools:text="Word or phrase explanation" />
 
-        <TextView
-            android:id="@+id/attached_images_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:drawablePadding="4dp"
-            android:textSize="16sp"
-            app:drawableStartCompat="@drawable/ic_image_24"
-            tools:text="3" />
-
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/tags"
             android:layout_width="match_parent"

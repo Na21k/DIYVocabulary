@@ -74,8 +74,6 @@ class WordsListAdapter(private val mOnWordActionListener: OnWordActionListener) 
             binding.transcription.text = item.transcription
             binding.translation.text = item.translation
             binding.explanation.text = item.explanation
-            binding.attachedImagesCount.text =
-                binding.root.resources.getString(R.string.image_count_formatted, 100500)
 
             updateViewsVisibility()
             updateTags(item.tagModels)
@@ -89,7 +87,6 @@ class WordsListAdapter(private val mOnWordActionListener: OnWordActionListener) 
             binding.transcription.isVisible = !mItemModel.transcription.isNullOrEmpty()
             binding.translation.isVisible = !mItemModel.translation.isNullOrEmpty()
             binding.explanation.isVisible = !mItemModel.explanation.isNullOrEmpty()
-            binding.attachedImagesCount.isVisible = true    //TODO if images count > 0
         }
 
         private fun updateTags(tagModels: List<TagModel>?) {
